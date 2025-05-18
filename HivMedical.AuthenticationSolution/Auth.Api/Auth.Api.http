@@ -1,0 +1,12 @@
+@Auth.Api_HostAddress = http://localhost:5051
+
+POST {{Auth.Api_HostAddress}}/api/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "john@example.com",
+  "password": "123456"
+}
+
+###

@@ -1,0 +1,40 @@
+# Ignore build output
+bin/
+obj/
+
+# Ignore user-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Ignore Rider files
+.idea/
+*.sln.iml
+
+# Ignore VS Code workspace
+.vscode/
+.vs/
+
+# Ignore build logs
+*.log
+
+# Ignore secrets/config
+appsettings.*.json
+!appsettings.json
+
+# Ignore publish
+publish/
+
+# Ignore migrations (optional)
+# Migrations/
+
+# Ignore EF Core tools cache
+*.dbmdl
+
+# Ignore node_modules (if Angular frontend is added)
+node_modules/
+
+# Ignore test coverage
+coverage/
+TestResults/
