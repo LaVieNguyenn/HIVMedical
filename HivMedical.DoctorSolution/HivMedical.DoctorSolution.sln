@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35913.81
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doctor.Api", "HivMedical.DoctorSolution\Doctor.Api.csproj", "{3EA18B7F-3996-4722-B895-0B0CFEB8DBB0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doctor.Application", "Doctor.Application\Doctor.Application.csproj", "{DEC0E072-4C54-4A17-AD10-A3D84FDD1B08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doctor.Domain", "Doctor.Domain\Doctor.Domain.csproj", "{7DCB521D-B359-4BE9-9FAA-3A2518885BB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doctor.Infrastructure", "Doctor.Infrastructure\Doctor.Infrastructure.csproj", "{452FE5B2-7BBF-4C86-A5BE-0CA4947C1219}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedKernel", "..\HivMedical.SharedKernel\SharedKernel\SharedKernel.csproj", "{252CEDAC-B29C-18F1-CACF-AC991847C1E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedLibrary", "..\HivMedical.SharedLibrary\SharedLibrary\SharedLibrary.csproj", "{910656AC-E9F7-4164-CD58-C3F8656432FD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3EA18B7F-3996-4722-B895-0B0CFEB8DBB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EA18B7F-3996-4722-B895-0B0CFEB8DBB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EA18B7F-3996-4722-B895-0B0CFEB8DBB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EA18B7F-3996-4722-B895-0B0CFEB8DBB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEC0E072-4C54-4A17-AD10-A3D84FDD1B08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEC0E072-4C54-4A17-AD10-A3D84FDD1B08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEC0E072-4C54-4A17-AD10-A3D84FDD1B08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEC0E072-4C54-4A17-AD10-A3D84FDD1B08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DCB521D-B359-4BE9-9FAA-3A2518885BB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DCB521D-B359-4BE9-9FAA-3A2518885BB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DCB521D-B359-4BE9-9FAA-3A2518885BB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DCB521D-B359-4BE9-9FAA-3A2518885BB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{452FE5B2-7BBF-4C86-A5BE-0CA4947C1219}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{452FE5B2-7BBF-4C86-A5BE-0CA4947C1219}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{452FE5B2-7BBF-4C86-A5BE-0CA4947C1219}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{452FE5B2-7BBF-4C86-A5BE-0CA4947C1219}.Release|Any CPU.Build.0 = Release|Any CPU
+		{252CEDAC-B29C-18F1-CACF-AC991847C1E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{252CEDAC-B29C-18F1-CACF-AC991847C1E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{252CEDAC-B29C-18F1-CACF-AC991847C1E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{252CEDAC-B29C-18F1-CACF-AC991847C1E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{910656AC-E9F7-4164-CD58-C3F8656432FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{910656AC-E9F7-4164-CD58-C3F8656432FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{910656AC-E9F7-4164-CD58-C3F8656432FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{910656AC-E9F7-4164-CD58-C3F8656432FD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {686E3850-924D-4C31-A0B8-6203C51360F4}
+	EndGlobalSection
+EndGlobal
