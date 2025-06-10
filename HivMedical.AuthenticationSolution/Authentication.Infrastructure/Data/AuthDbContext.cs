@@ -49,6 +49,46 @@ namespace Authentication.Infrastructure.Data
                 entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
                 entity.Property(e => e.UpdatedBy).HasColumnName("updated_by");
             });
+            
+            // Seed roles data
+            modelBuilder.Entity<Role>().HasData(
+                new Role
+                {
+                    Id = 1,
+                    Name = "Guest",
+                    CreatedAt = DateTime.UtcNow
+                },
+                new Role
+                {
+                    Id = 2,
+                    Name = "Customer",
+                    CreatedAt = DateTime.UtcNow
+                },
+                new Role
+                {
+                    Id = 3,
+                    Name = "Staff",
+                    CreatedAt = DateTime.UtcNow
+                },
+                new Role
+                {
+                    Id = 4,
+                    Name = "Doctor",
+                    CreatedAt = DateTime.UtcNow
+                },
+                new Role
+                {
+                    Id = 5,
+                    Name = "Manager",
+                    CreatedAt = DateTime.UtcNow
+                },
+                new Role
+                {
+                    Id = 6,
+                    Name = "Admin",
+                    CreatedAt = DateTime.UtcNow
+                }
+            );
         }
     }
 }

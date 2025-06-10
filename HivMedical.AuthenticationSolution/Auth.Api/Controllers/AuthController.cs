@@ -21,5 +21,12 @@ namespace Auth.Api.Controllers
             var result = await _authService.LoginAsync(request);
             return result.Success ? Ok(result) : Unauthorized(result);
         }
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+        {
+            var result = await _authService.RegisterAsync(request);
+            return result.Success ? Ok(result) : BadRequest(result);
+        }
     }
 }

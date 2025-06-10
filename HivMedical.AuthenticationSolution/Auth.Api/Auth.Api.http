@@ -1,12 +1,25 @@
-@Auth.Api_HostAddress = http://localhost:5051
+@host = https://localhost:7199
 
-POST {{Auth.Api_HostAddress}}/api/auth/login
+### Login API
+POST {{host}}/api/auth/login
 Content-Type: application/json
-Accept: application/json
 
 {
-  "email": "john@example.com",
-  "password": "123456"
+    "email": "admin@example.com",
+    "password": "admin123"
+}
+
+### Register API
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{
+    "email": "user@example.com",
+    "password": "password123",
+    "fullName": "New User",
+    "phone": "0123456789",
+    "dateOfBirth": "1990-01-01",
+    "gender": 1
 }
 
 ###
