@@ -22,6 +22,13 @@ namespace Auth.Api.Controllers
             return result.Success ? Ok(result) : Unauthorized(result);
         }
 
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            var result = await _authService.LogoutAsync();
+            return Ok(result);
+        }
+
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {

@@ -45,6 +45,21 @@ namespace Authentication.Application.Services
             };
         }
 
+        public async Task<ApiResponse<LogoutResponse>> LogoutAsync()
+        {
+            // Since we're using JWT tokens, server-side logout is minimal
+            // as the token management is primarily handled client-side
+            return new ApiResponse<LogoutResponse>
+            {
+                Success = true,
+                Message = "Logout Successful",
+                Data = new LogoutResponse
+                {
+                    LogoutTime = DateTime.UtcNow
+                }
+            };
+        }
+
         public async Task<ApiResponse<RegisterResponse>> RegisterAsync(RegisterRequest request)
         {
             // Check if email already exists
