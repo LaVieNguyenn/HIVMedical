@@ -35,20 +35,24 @@ namespace Authentication.Infrastructure.Repositories
             }
         }
 
-        public async Task<ApiResponse<User>> DeleteAsync(User entity)
+        public async Task<ApiResponse<bool>> DeleteAsync(int id)
         {
             try
             {
+                var entity = await GetByIdAsync(id);
+                if (entity == null)
+                    return new ApiResponse<bool> { Success = false, Message = "Entity not found" };
+
                 _context.Users.Remove(entity);
-                return new ApiResponse<User> { Success = true, Message = "User deleted successfully" };
+                return new ApiResponse<bool> { Success = true, Data = true };
             }
             catch (Exception ex)
             {
-                return new ApiResponse<User> { Success = false, Message = ex.Message };
+                return new ApiResponse<bool> { Success = false, Message = ex.Message };
             }
         }
 
-        public async Task<User> FindByIdAsync(int id)
+        public async Task<User> GetByIdAsync(int id)
         {
             return await _context.Users.FindAsync(id);
         }
@@ -68,6 +72,13 @@ namespace Authentication.Infrastructure.Repositories
             return await _context.Users
                 .Include(u => u.Role)
                 .FirstOrDefaultAsync(u => u.Email == email);
+        }
+
+        public async Task<User> GetUserWithRoleByIdAsync(int id)
+        {
+            return await _context.Users
+                .Include(u => u.Role)
+                .FirstOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task<bool> EmailExistsAsync(string email)

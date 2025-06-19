@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Authentication.Infrastructure.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20250610073419_Ins")]
+    [Migration("20250617174313_Ins")]
     partial class Ins
     {
         /// <inheritdoc />
@@ -63,37 +63,37 @@ namespace Authentication.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 6, 10, 7, 34, 19, 172, DateTimeKind.Utc).AddTicks(2546),
+                            CreatedAt = new DateTime(2025, 6, 17, 17, 43, 11, 763, DateTimeKind.Utc).AddTicks(8748),
                             Name = "Guest"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 6, 10, 7, 34, 19, 172, DateTimeKind.Utc).AddTicks(2548),
+                            CreatedAt = new DateTime(2025, 6, 17, 17, 43, 11, 763, DateTimeKind.Utc).AddTicks(8751),
                             Name = "Customer"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 6, 10, 7, 34, 19, 172, DateTimeKind.Utc).AddTicks(2549),
+                            CreatedAt = new DateTime(2025, 6, 17, 17, 43, 11, 763, DateTimeKind.Utc).AddTicks(8752),
                             Name = "Staff"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2025, 6, 10, 7, 34, 19, 172, DateTimeKind.Utc).AddTicks(2550),
+                            CreatedAt = new DateTime(2025, 6, 17, 17, 43, 11, 763, DateTimeKind.Utc).AddTicks(8753),
                             Name = "Doctor"
                         },
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2025, 6, 10, 7, 34, 19, 172, DateTimeKind.Utc).AddTicks(2551),
+                            CreatedAt = new DateTime(2025, 6, 17, 17, 43, 11, 763, DateTimeKind.Utc).AddTicks(8754),
                             Name = "Manager"
                         },
                         new
                         {
                             Id = 6,
-                            CreatedAt = new DateTime(2025, 6, 10, 7, 34, 19, 172, DateTimeKind.Utc).AddTicks(2552),
+                            CreatedAt = new DateTime(2025, 6, 17, 17, 43, 11, 763, DateTimeKind.Utc).AddTicks(8754),
                             Name = "Admin"
                         });
                 });
@@ -106,6 +106,30 @@ namespace Authentication.Infrastructure.Migrations
                         .HasColumnName("user_id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("address");
+
+                    b.Property<string>("Allergies")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("allergies");
+
+                    b.Property<string>("BloodType")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("blood_type");
+
+                    b.Property<string>("ChronicConditions")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("chronic_conditions");
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("city");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("country");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2")
@@ -122,6 +146,14 @@ namespace Authentication.Infrastructure.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("email");
+
+                    b.Property<string>("EmergencyContactName")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("emergency_contact_name");
+
+                    b.Property<string>("EmergencyContactPhone")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("emergency_contact_phone");
 
                     b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)")
@@ -143,9 +175,17 @@ namespace Authentication.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("phone");
 
+                    b.Property<string>("PostalCode")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("postal_code");
+
                     b.Property<int>("RoleId")
                         .HasColumnType("int")
                         .HasColumnName("role_id");
+
+                    b.Property<string>("State")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("state");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2")

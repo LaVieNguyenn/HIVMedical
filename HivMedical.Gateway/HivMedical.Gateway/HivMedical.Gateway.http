@@ -1,0 +1,6 @@
+@HivMedical.Gateway_HostAddress = http://localhost:5246
+
+GET {{HivMedical.Gateway_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

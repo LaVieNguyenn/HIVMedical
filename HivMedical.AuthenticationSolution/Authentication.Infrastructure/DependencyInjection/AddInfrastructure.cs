@@ -16,12 +16,17 @@ namespace Authentication.Infrastructure.DependencyInjection
         {
             services.AddDbContext<AuthDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-
-            services.AddScoped<AuthService>();
+            
+            // Repository registrations
             services.AddScoped<IUserRepository, UserRepository>();
+            
+            // Unit of Work registration
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            
+            // Register services
+            services.AddScoped<AuthService>();
             services.AddScoped<IJwtService, JwtService>();
-
+            
             return services;
         }
     }

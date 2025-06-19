@@ -45,6 +45,16 @@ namespace Authentication.Infrastructure.Migrations
                     is_anonymous = table.Column<bool>(type: "bit", nullable: false),
                     date_of_birth = table.Column<DateTime>(type: "datetime2", nullable: true),
                     role_id = table.Column<int>(type: "int", nullable: false),
+                    address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    city = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    state = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    country = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    postal_code = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    emergency_contact_name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    emergency_contact_phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    blood_type = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    allergies = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    chronic_conditions = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
                     updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
                     created_by = table.Column<int>(type: "int", nullable: true),
@@ -66,12 +76,12 @@ namespace Authentication.Infrastructure.Migrations
                 columns: new[] { "role_id", "created_at", "created_by", "name", "updated_at", "updated_by" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 6, 10, 7, 34, 19, 172, DateTimeKind.Utc).AddTicks(2546), null, "Guest", null, null },
-                    { 2, new DateTime(2025, 6, 10, 7, 34, 19, 172, DateTimeKind.Utc).AddTicks(2548), null, "Customer", null, null },
-                    { 3, new DateTime(2025, 6, 10, 7, 34, 19, 172, DateTimeKind.Utc).AddTicks(2549), null, "Staff", null, null },
-                    { 4, new DateTime(2025, 6, 10, 7, 34, 19, 172, DateTimeKind.Utc).AddTicks(2550), null, "Doctor", null, null },
-                    { 5, new DateTime(2025, 6, 10, 7, 34, 19, 172, DateTimeKind.Utc).AddTicks(2551), null, "Manager", null, null },
-                    { 6, new DateTime(2025, 6, 10, 7, 34, 19, 172, DateTimeKind.Utc).AddTicks(2552), null, "Admin", null, null }
+                    { 1, new DateTime(2025, 6, 17, 17, 43, 11, 763, DateTimeKind.Utc).AddTicks(8748), null, "Guest", null, null },
+                    { 2, new DateTime(2025, 6, 17, 17, 43, 11, 763, DateTimeKind.Utc).AddTicks(8751), null, "Customer", null, null },
+                    { 3, new DateTime(2025, 6, 17, 17, 43, 11, 763, DateTimeKind.Utc).AddTicks(8752), null, "Staff", null, null },
+                    { 4, new DateTime(2025, 6, 17, 17, 43, 11, 763, DateTimeKind.Utc).AddTicks(8753), null, "Doctor", null, null },
+                    { 5, new DateTime(2025, 6, 17, 17, 43, 11, 763, DateTimeKind.Utc).AddTicks(8754), null, "Manager", null, null },
+                    { 6, new DateTime(2025, 6, 17, 17, 43, 11, 763, DateTimeKind.Utc).AddTicks(8754), null, "Admin", null, null }
                 });
 
             migrationBuilder.CreateIndex(

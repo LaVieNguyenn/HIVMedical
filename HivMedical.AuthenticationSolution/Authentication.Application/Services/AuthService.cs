@@ -2,6 +2,8 @@
 using Authentication.Application.Interfaces;
 using Authentication.Domain.Entities;
 using SharedLibrary.Jwt;
+using SharedLibrary.Messaging;
+using SharedLibrary.Messaging.Events;
 using SharedLibrary.Response;
 using System;
 using System.Collections.Generic;
@@ -16,11 +18,13 @@ namespace Authentication.Application.Services
     {
         private readonly IUnitOfWork _uow;
         private readonly IJwtService _jwtService;
+        private readonly IEventBus _eventBus;
 
-        public AuthService(IUnitOfWork unitOfWork, IJwtService jwtService)
+        public AuthService(IUnitOfWork unitOfWork, IJwtService jwtService, IEventBus eventBus)
         {
             _jwtService = jwtService;
             _uow = unitOfWork;
+            _eventBus = eventBus;
         }
 
         public async Task<ApiResponse<LoginResponse>> LoginAsync(LoginRequest request)
@@ -47,8 +51,7 @@ namespace Authentication.Application.Services
 
         public async Task<ApiResponse<LogoutResponse>> LogoutAsync()
         {
-            // Since we're using JWT tokens, server-side logout is minimal
-            // as the token management is primarily handled client-side
+           
             return new ApiResponse<LogoutResponse>
             {
                 Success = true,
@@ -62,7 +65,7 @@ namespace Authentication.Application.Services
 
         public async Task<ApiResponse<RegisterResponse>> RegisterAsync(RegisterRequest request)
         {
-            // Check if email already exists
+          
             if (await _uow.Users.EmailExistsAsync(request.Email))
             {
                 return new ApiResponse<RegisterResponse>
@@ -72,7 +75,7 @@ namespace Authentication.Application.Services
                 };
             }
 
-            // Create new user with default role (assuming RoleId 2 is for regular users)
+           
             var user = new User
             {
                 Email = request.Email,
@@ -82,7 +85,7 @@ namespace Authentication.Application.Services
                 DateOfBirth = request.DateOfBirth,
                 Gender = request.Gender,
                 IsAnonymous = false,
-                RoleId = 2, // Assuming 2 is the default "User" role
+                RoleId = 2, 
                 CreatedAt = DateTime.UtcNow
             };
 
@@ -98,8 +101,25 @@ namespace Authentication.Application.Services
 
             await _uow.SaveChangesAsync();
 
-            // Get user with role for response
+           
             var createdUser = await _uow.Users.GetUserWithRoleByEmailAsync(request.Email);
+
+            
+            try
+            {
+                var userRegisteredEvent = new UserRegisteredEvent(
+                    createdUser.Id,
+                    createdUser.Email,
+                    createdUser.FullName ?? string.Empty,
+                    createdUser.Role.Name
+                );
+                
+                _eventBus.Publish(userRegisteredEvent);
+            }
+            catch (Exception ex)
+            {           
+                Console.WriteLine($"Failed to publish UserRegisteredEvent: {ex.Message}");
+            }
 
             return new ApiResponse<RegisterResponse>
             {
