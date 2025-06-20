@@ -1,6 +1,8 @@
 using Patient.Application.DTOs;
+using Patient.Application.Events;
 using Patient.Domain.Entities;
 using Patient.Infrastructure.UnitOfWorks;
+using SharedLibrary.Messaging;
 using SharedLibrary.Response;
 
 namespace Patient.Application.Services
@@ -8,10 +10,12 @@ namespace Patient.Application.Services
     public class AppointmentService
     {
         private readonly IUnitOfWork _uow;
+        private readonly IEventBus _eventBus;
 
-        public AppointmentService(IUnitOfWork unitOfWork)
+        public AppointmentService(IUnitOfWork unitOfWork, IEventBus eventBus)
         {
             _uow = unitOfWork;
+            _eventBus = eventBus;
         }
 
         public async Task<ApiResponse<AppointmentDto>> GetAppointmentByIdAsync(int id)
@@ -122,6 +126,31 @@ namespace Patient.Application.Services
 
             // Get the appointment with patient info
             var createdAppointment = await _uow.Appointments.GetByIdAsync(appointment.Id);
+
+            // Publish AppointmentCreatedEvent
+            try
+            {
+                var appointmentCreatedEvent = new AppointmentCreatedEvent(
+                    appointment.Id,
+                    appointment.PatientId,
+                    createdAppointment?.Patient?.FullName ?? "",
+                    createdAppointment?.Patient?.PatientCode ?? "",
+                    appointment.DoctorId,
+                    appointment.AppointmentDate,
+                    appointment.AppointmentTime,
+                    appointment.AppointmentType,
+                    appointment.Reason,
+                    appointment.Notes,
+                    appointment.CreatedAt
+                );
+
+                _eventBus.Publish(appointmentCreatedEvent);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to publish AppointmentCreatedEvent: {ex.Message}");
+            }
+
             var appointmentDto = MapToDto(createdAppointment!);
 
             return new ApiResponse<AppointmentDto>

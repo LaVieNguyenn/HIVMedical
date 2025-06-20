@@ -1,5 +1,7 @@
 using Patient.Application.DTOs;
+using Patient.Application.Events;
 using Patient.Infrastructure.UnitOfWorks;
+using SharedLibrary.Messaging;
 using SharedLibrary.Response;
 
 namespace Patient.Application.Services
@@ -7,10 +9,12 @@ namespace Patient.Application.Services
     public class PatientService
     {
         private readonly IUnitOfWork _uow;
+        private readonly IEventBus _eventBus;
 
-        public PatientService(IUnitOfWork unitOfWork)
+        public PatientService(IUnitOfWork unitOfWork, IEventBus eventBus)
         {
             _uow = unitOfWork;
+            _eventBus = eventBus;
         }
 
         public async Task<ApiResponse<PatientDto>> GetPatientByIdAsync(int id)
@@ -99,6 +103,32 @@ namespace Patient.Application.Services
 
             await _uow.SaveChangesAsync();
 
+            // Publish PatientCreatedEvent
+            try
+            {
+                var patientCreatedEvent = new PatientCreatedEvent(
+                    patient.Id,
+                    patient.PatientCode,
+                    patient.FullName,
+                    patient.Email,
+                    patient.Phone,
+                    patient.DateOfBirth,
+                    patient.Gender,
+                    patient.AuthUserId,
+                    patient.DiagnosisDate,
+                    patient.HIVStatus,
+                    patient.TreatmentStatus,
+                    patient.CreatedAt
+                );
+
+                _eventBus.Publish(patientCreatedEvent);
+            }
+            catch (Exception ex)
+            {
+                // Log error but don't fail the operation
+                Console.WriteLine($"Failed to publish PatientCreatedEvent: {ex.Message}");
+            }
+
             var patientDto = MapToDto(patient);
             return new ApiResponse<PatientDto>
             {
@@ -145,6 +175,30 @@ namespace Patient.Application.Services
             }
 
             await _uow.SaveChangesAsync();
+
+            // Publish PatientUpdatedEvent
+            try
+            {
+                var patientUpdatedEvent = new PatientUpdatedEvent(
+                    patient.Id,
+                    patient.PatientCode,
+                    patient.FullName,
+                    patient.Email,
+                    patient.Phone,
+                    patient.DateOfBirth,
+                    patient.Gender,
+                    patient.HIVStatus,
+                    patient.TreatmentStatus,
+                    patient.UpdatedAt ?? DateTime.UtcNow
+                );
+
+                _eventBus.Publish(patientUpdatedEvent);
+            }
+            catch (Exception ex)
+            {
+                // Log error but don't fail the operation
+                Console.WriteLine($"Failed to publish PatientUpdatedEvent: {ex.Message}");
+            }
 
             var patientDto = MapToDto(patient);
             return new ApiResponse<PatientDto>
