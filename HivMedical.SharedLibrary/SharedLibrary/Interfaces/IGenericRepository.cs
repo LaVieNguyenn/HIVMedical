@@ -10,6 +10,12 @@ namespace SharedLibrary.Interfaces
 {
     public interface IGenericRepository<T>
     {
-       
+        Task<T?> GetByIdAsync(int id);
+        Task<IEnumerable<T>> GetAllAsync();
+        Task<ApiResponse<T>> CreateAsync(T entity);
+        Task<ApiResponse<T>> UpdateAsync(T entity);
+        Task<ApiResponse<bool>> DeleteAsync(T entity);
+        Task<T?> GetByAsync(Expression<Func<T, bool>> predicate);
+        Task<IEnumerable<T>> GetManyAsync(Expression<Func<T, bool>> predicate);
     }
 }

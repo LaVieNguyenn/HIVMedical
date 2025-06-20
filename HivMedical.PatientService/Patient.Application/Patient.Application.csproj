@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Patient.Domain\Patient.Domain.csproj" />
+    <ProjectReference Include="..\Patient.Infrastructure\Patient.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\HivMedical.SharedLibrary\SharedLibrary\SharedLibrary.csproj" />
+  </ItemGroup>
+
+</Project>

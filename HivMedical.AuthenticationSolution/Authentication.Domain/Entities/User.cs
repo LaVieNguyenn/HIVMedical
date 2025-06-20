@@ -1,4 +1,4 @@
-﻿using SharedKernel.Entities;
+﻿// using SharedKernel.Entities; // Temporarily commented out for Docker build
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -8,6 +8,17 @@ using System.Threading.Tasks;
 
 namespace Authentication.Domain.Entities
 {
+    // Temporary BaseEntity for Docker build
+    public class BaseEntity
+    {
+        public int Id { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? UpdatedAt { get; set; }
+        public bool IsDeleted { get; set; } = false;
+        public string? CreatedBy { get; set; }
+        public string? UpdatedBy { get; set; }
+    }
+
     public class User : BaseEntity
     {
         public string? UserName { get; set; }

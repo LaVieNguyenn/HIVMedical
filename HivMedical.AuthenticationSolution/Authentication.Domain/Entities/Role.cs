@@ -1,4 +1,4 @@
-﻿using SharedKernel.Entities;
+﻿// using SharedKernel.Entities; // Temporarily commented out for Docker build
 using System;
 using System.Collections.Generic;
 using System.Linq;

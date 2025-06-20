@@ -1,0 +1,162 @@
+@Patient.Api_HostAddress = http://localhost:5072
+
+### Variables
+@jwt_token = YOUR_JWT_TOKEN_HERE
+@patient_id = 1
+@doctor_id = 1
+@appointment_id = 1
+
+### 1. Create Appointment (Patient creates appointment)
+POST {{Patient.Api_HostAddress}}/api/appointment
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "patientId": {{patient_id}},
+  "doctorId": {{doctor_id}},
+  "appointmentDate": "2024-12-25T00:00:00Z",
+  "appointmentTime": "09:00:00",
+  "appointmentType": "Consultation",
+  "reason": "Regular HIV checkup",
+  "notes": "Patient requested morning appointment"
+}
+
+### 2. Create Lab Test Appointment
+POST {{Patient.Api_HostAddress}}/api/appointment
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "patientId": {{patient_id}},
+  "doctorId": {{doctor_id}},
+  "appointmentDate": "2024-12-26T00:00:00Z",
+  "appointmentTime": "10:30:00",
+  "appointmentType": "Lab Test",
+  "reason": "Viral load test",
+  "notes": "Fasting required"
+}
+
+### 3. Get Appointment by ID
+GET {{Patient.Api_HostAddress}}/api/appointment/{{appointment_id}}
+Authorization: Bearer {{jwt_token}}
+
+### 4. Get My Appointments (Patient view)
+GET {{Patient.Api_HostAddress}}/api/appointment/my-appointments
+Authorization: Bearer {{jwt_token}}
+
+### 5. Get My Appointment Summary
+GET {{Patient.Api_HostAddress}}/api/appointment/my-summary
+Authorization: Bearer {{jwt_token}}
+
+### 6. Get Upcoming Appointments (next 7 days)
+GET {{Patient.Api_HostAddress}}/api/appointment/upcoming?days=7
+Authorization: Bearer {{jwt_token}}
+
+### 7. Get Appointments by Patient ID (Doctor/Admin view)
+GET {{Patient.Api_HostAddress}}/api/appointment/patient/{{patient_id}}
+Authorization: Bearer {{jwt_token}}
+
+### 8. Get Appointments by Doctor ID (Doctor/Admin view)
+GET {{Patient.Api_HostAddress}}/api/appointment/doctor/{{doctor_id}}
+Authorization: Bearer {{jwt_token}}
+
+### 9. Get Today's Appointments (Doctor view)
+GET {{Patient.Api_HostAddress}}/api/appointment/today
+Authorization: Bearer {{jwt_token}}
+
+### 10. Filter Appointments - All appointments
+GET {{Patient.Api_HostAddress}}/api/appointment/filter
+Authorization: Bearer {{jwt_token}}
+
+### 11. Filter Appointments - By Status
+GET {{Patient.Api_HostAddress}}/api/appointment/filter?status=Scheduled
+Authorization: Bearer {{jwt_token}}
+
+### 12. Filter Appointments - By Date Range
+GET {{Patient.Api_HostAddress}}/api/appointment/filter?fromDate=2024-12-01&toDate=2024-12-31
+Authorization: Bearer {{jwt_token}}
+
+### 13. Filter Appointments - By Type
+GET {{Patient.Api_HostAddress}}/api/appointment/filter?appointmentType=Consultation
+Authorization: Bearer {{jwt_token}}
+
+### 14. Filter Appointments - Complex Filter
+GET {{Patient.Api_HostAddress}}/api/appointment/filter?patientId={{patient_id}}&status=Scheduled&appointmentType=Lab Test&pageNumber=1&pageSize=10
+Authorization: Bearer {{jwt_token}}
+
+### 15. Update Appointment
+PUT {{Patient.Api_HostAddress}}/api/appointment/{{appointment_id}}
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "appointmentDate": "2024-12-25T00:00:00Z",
+  "appointmentTime": "14:00:00",
+  "appointmentType": "Follow-up",
+  "reason": "Follow-up after lab results",
+  "notes": "Patient requested afternoon slot"
+}
+
+### 16. Update Appointment Status to Completed (Doctor/Admin only)
+PATCH {{Patient.Api_HostAddress}}/api/appointment/{{appointment_id}}/status
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "status": "Completed",
+  "notes": "Patient attended appointment. All vitals normal."
+}
+
+### 17. Update Appointment Status to Cancelled
+PATCH {{Patient.Api_HostAddress}}/api/appointment/{{appointment_id}}/status
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "status": "Cancelled",
+  "notes": "Patient requested cancellation due to emergency"
+}
+
+### 18. Update Appointment Status to No-Show
+PATCH {{Patient.Api_HostAddress}}/api/appointment/{{appointment_id}}/status
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "status": "No-Show",
+  "notes": "Patient did not attend scheduled appointment"
+}
+
+### 19. Delete Appointment (Only scheduled appointments)
+DELETE {{Patient.Api_HostAddress}}/api/appointment/{{appointment_id}}
+Authorization: Bearer {{jwt_token}}
+
+### 20. Test Conflict Detection - Try to book same time slot
+POST {{Patient.Api_HostAddress}}/api/appointment
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "patientId": 2,
+  "doctorId": {{doctor_id}},
+  "appointmentDate": "2024-12-25T00:00:00Z",
+  "appointmentTime": "09:00:00",
+  "appointmentType": "Consultation",
+  "reason": "This should fail due to conflict",
+  "notes": "Testing conflict detection"
+}
+
+### 21. Test Past Date Validation - Try to book in the past
+POST {{Patient.Api_HostAddress}}/api/appointment
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "patientId": {{patient_id}},
+  "doctorId": {{doctor_id}},
+  "appointmentDate": "2024-01-01T00:00:00Z",
+  "appointmentTime": "09:00:00",
+  "appointmentType": "Consultation",
+  "reason": "This should fail - past date",
+  "notes": "Testing past date validation"
+}

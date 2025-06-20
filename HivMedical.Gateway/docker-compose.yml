@@ -1,57 +1,17 @@
 version: '3.8'
 
 services:
-  sql-server:
-    image: mcr.microsoft.com/mssql/server:2019-latest
-    environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=HivMedicalPassword123!
-    ports:
-      - "1433:1433"
-    volumes:
-      - sqldata:/var/opt/mssql
-    networks:
-      - hivnet
-    restart: always
-
   rabbitmq:
     image: rabbitmq:3-management
+    container_name: gateway-rabbitmq
     ports:
       - "5672:5672"
       - "15672:15672"
     environment:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
-    networks:
-      - hivnet
-    restart: always
-
-  api-gateway:
-    build:
-      context: ./ApiGateway
-      dockerfile: Dockerfile
-    ports:
-      - "5000:80"
-      - "5001:443"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:80;https://+:443
-    depends_on:
-      - auth-service
-    networks:
-      - hivnet
-    restart: always
-
-  auth-service:
-    build:
-      context: ../HivMedical.AuthenticationSolution/Auth.Api
-      dockerfile: Dockerfile
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Server=sql-server;Database=HivMedical.Auth;User Id=sa;Password=HivMedicalPassword123!;TrustServerCertificate=True
-    depends_on:
-      - sql-server
-      - rabbitmq
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
     networks:
       - hivnet
     restart: always
@@ -61,4 +21,4 @@ networks:
     driver: bridge
 
 volumes:
-  sqldata: 
+  rabbitmq_data:

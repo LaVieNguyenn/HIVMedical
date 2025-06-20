@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+  # RabbitMQ Message Broker
   rabbitmq:
     image: rabbitmq:3-management
     container_name: hiv-rabbitmq
@@ -13,6 +14,12 @@ services:
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
     restart: unless-stopped
+    networks:
+      - hivmedical-network
 
 volumes:
-  rabbitmq_data: 
+  rabbitmq_data:
+
+networks:
+  hivmedical-network:
+    driver: bridge

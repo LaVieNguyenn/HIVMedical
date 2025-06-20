@@ -6,10 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <!-- Temporarily commented out for Docker build
   <ItemGroup>
     <ProjectReference Include="..\..\HivMedical.SharedKernel\SharedKernel\SharedKernel.csproj" />
   </ItemGroup>
-  -->
 
 </Project>

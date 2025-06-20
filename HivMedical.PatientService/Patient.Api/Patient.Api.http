@@ -1,0 +1,89 @@
+@Patient.Api_HostAddress = http://localhost:5072
+@Auth.Api_HostAddress = http://localhost:5071
+
+### Step 1: Login to Auth Service to get JWT token
+POST {{Auth.Api_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "admin123"
+}
+
+### Step 2: Register a new user (if needed)
+POST {{Auth.Api_HostAddress}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "patient@example.com",
+  "password": "patient123",
+  "fullName": "John Doe Patient",
+  "phone": "0123456789",
+  "dateOfBirth": "1990-01-01T00:00:00Z",
+  "gender": 1
+}
+
+### Step 3: Login with the new patient user
+POST {{Auth.Api_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "patient@example.com",
+  "password": "patient123"
+}
+
+### Step 4: Test Patient API without token (should fail)
+GET {{Patient.Api_HostAddress}}/api/patient/my-profile
+Accept: application/json
+
+### Step 5: Test Patient API with token (replace YOUR_JWT_TOKEN with actual token from login)
+GET {{Patient.Api_HostAddress}}/api/patient/my-profile
+Accept: application/json
+Authorization: Bearer YOUR_JWT_TOKEN
+
+### Step 6: Create patient profile
+POST {{Patient.Api_HostAddress}}/api/patient
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN
+
+{
+  "fullName": "John Doe Patient",
+  "email": "patient@example.com",
+  "phone": "0123456789",
+  "dateOfBirth": "1990-01-01T00:00:00Z",
+  "gender": 1,
+  "address": "123 Main St, City",
+  "emergencyContact": "Jane Doe",
+  "emergencyPhone": "0987654321",
+  "diagnosisDate": "2023-01-01T00:00:00Z",
+  "hivStatus": "Positive",
+  "treatmentStatus": "On Treatment"
+}
+
+### Step 7: Get all patients (requires Doctor/Admin role)
+GET {{Patient.Api_HostAddress}}/api/patient
+Accept: application/json
+Authorization: Bearer YOUR_JWT_TOKEN
+
+### Step 8: Create medical record (requires Doctor/Admin role)
+POST {{Patient.Api_HostAddress}}/api/medicalrecord
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN
+
+{
+  "patientId": 1,
+  "recordDate": "2024-01-01T00:00:00Z",
+  "recordType": "Lab Result",
+  "title": "HIV Viral Load Test",
+  "description": "Routine viral load monitoring",
+  "labResults": "Viral Load: Undetectable (<20 copies/mL)",
+  "medications": "Efavirenz/Tenofovir/Emtricitabine",
+  "notes": "Patient responding well to treatment"
+}
+
+### Step 9: Get my medical records
+GET {{Patient.Api_HostAddress}}/api/medicalrecord/my-records
+Accept: application/json
+Authorization: Bearer YOUR_JWT_TOKEN
+
+###

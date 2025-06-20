@@ -98,5 +98,23 @@ namespace Authentication.Infrastructure.Repositories
                 return new ApiResponse<User> { Success = false, Message = ex.Message };
             }
         }
+
+        public async Task<ApiResponse<bool>> DeleteAsync(User entity)
+        {
+            try
+            {
+                _context.Users.Remove(entity);
+                return new ApiResponse<bool> { Success = true, Data = true, Message = "User deleted successfully" };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse<bool> { Success = false, Message = ex.Message };
+            }
+        }
+
+        public async Task<IEnumerable<User>> GetManyAsync(Expression<Func<User, bool>> predicate)
+        {
+            return await _context.Users.Where(predicate).ToListAsync();
+        }
     }
 }
