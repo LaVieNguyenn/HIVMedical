@@ -19,6 +19,10 @@ namespace Patient.Infrastructure.DependencyInjection
             services.AddScoped<IPatientRepository, PatientRepository>();
             services.AddScoped<IMedicalRecordRepository, MedicalRecordRepository>();
             services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+            services.AddScoped<IMedicationRepository, MedicationRepository>();
+            services.AddScoped<IPatientMedicationRepository, PatientMedicationRepository>();
+            services.AddScoped<IMedicationScheduleRepository, MedicationScheduleRepository>();
+            services.AddScoped<IMedicationAdherenceRepository, MedicationAdherenceRepository>();
 
             // Unit of Work
             services.AddScoped<IUnitOfWork, UnitOfWork>();

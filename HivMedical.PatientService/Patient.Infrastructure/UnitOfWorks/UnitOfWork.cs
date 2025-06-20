@@ -16,11 +16,19 @@ namespace Patient.Infrastructure.UnitOfWorks
             Patients = new PatientRepository(_context);
             MedicalRecords = new MedicalRecordRepository(_context);
             Appointments = new AppointmentRepository(_context);
+            Medications = new MedicationRepository(_context);
+            PatientMedications = new PatientMedicationRepository(_context);
+            MedicationSchedules = new MedicationScheduleRepository(_context);
+            MedicationAdherences = new MedicationAdherenceRepository(_context);
         }
 
         public IPatientRepository Patients { get; private set; }
         public IMedicalRecordRepository MedicalRecords { get; private set; }
         public IAppointmentRepository Appointments { get; private set; }
+        public IMedicationRepository Medications { get; private set; }
+        public IPatientMedicationRepository PatientMedications { get; private set; }
+        public IMedicationScheduleRepository MedicationSchedules { get; private set; }
+        public IMedicationAdherenceRepository MedicationAdherences { get; private set; }
 
         public async Task<int> SaveChangesAsync()
         {

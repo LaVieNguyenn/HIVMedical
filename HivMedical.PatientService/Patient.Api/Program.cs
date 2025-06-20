@@ -15,6 +15,8 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddScoped<PatientService>();
 builder.Services.AddScoped<MedicalRecordService>();
 builder.Services.AddScoped<AppointmentService>();
+builder.Services.AddScoped<MedicationService>();
+builder.Services.AddScoped<PatientMedicationService>();
 
 // Add JWT Authentication from SharedLibrary
 builder.Services.AddLibrary(builder.Configuration);

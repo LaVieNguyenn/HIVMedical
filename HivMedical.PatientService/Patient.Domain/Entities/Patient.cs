@@ -24,5 +24,8 @@ namespace Patient.Domain.Entities
         // Navigation properties
         public ICollection<MedicalRecord> MedicalRecords { get; set; } = new List<MedicalRecord>();
         public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
+        public ICollection<PatientMedication> PatientMedications { get; set; } = new List<PatientMedication>();
+        public ICollection<MedicationSchedule> MedicationSchedules { get; set; } = new List<MedicationSchedule>();
+        public ICollection<MedicationAdherence> MedicationAdherences { get; set; } = new List<MedicationAdherence>();
     }
 }

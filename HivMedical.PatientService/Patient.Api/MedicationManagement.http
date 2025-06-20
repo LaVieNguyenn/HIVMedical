@@ -1,0 +1,240 @@
+@Patient.Api_HostAddress = http://localhost:5072
+
+### Variables
+@jwt_token = YOUR_JWT_TOKEN_HERE
+@patient_id = 1
+@doctor_id = 1
+@medication_id = 1
+@patient_medication_id = 1
+
+### ========== MEDICATION ENDPOINTS ==========
+
+### 1. Get All Medications
+GET {{Patient.Api_HostAddress}}/api/medication
+Authorization: Bearer {{jwt_token}}
+
+### 2. Get HIV Medications
+GET {{Patient.Api_HostAddress}}/api/medication/hiv
+Authorization: Bearer {{jwt_token}}
+
+### 3. Get ARV Medications
+GET {{Patient.Api_HostAddress}}/api/medication/arv
+Authorization: Bearer {{jwt_token}}
+
+### 4. Search Medications
+GET {{Patient.Api_HostAddress}}/api/medication/search?searchTerm=efavirenz
+Authorization: Bearer {{jwt_token}}
+
+### 5. Filter Medications
+GET {{Patient.Api_HostAddress}}/api/medication/filter?category=ARV&medicationType=NNRTI
+Authorization: Bearer {{jwt_token}}
+
+### 6. Get Medication by ID
+GET {{Patient.Api_HostAddress}}/api/medication/{{medication_id}}
+Authorization: Bearer {{jwt_token}}
+
+### 7. Create Medication (Doctor/Admin only)
+POST {{Patient.Api_HostAddress}}/api/medication
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "name": "Efavirenz/Tenofovir/Emtricitabine",
+  "genericName": "Efavirenz/Tenofovir DF/Emtricitabine",
+  "brandName": "Atripla",
+  "category": "ARV",
+  "medicationType": "NNRTI + NRTI",
+  "strength": "600mg/300mg/200mg",
+  "form": "Tablet",
+  "description": "Fixed-dose combination for HIV treatment",
+  "sideEffects": "Dizziness, vivid dreams, rash, nausea",
+  "contraindications": "Severe hepatic impairment, pregnancy (first trimester)",
+  "drugInteractions": "Warfarin, rifampin, St. John's wort",
+  "storageInstructions": "Store at room temperature, protect from moisture",
+  "requiresPrescription": true
+}
+
+### 8. Create Another ARV Medication
+POST {{Patient.Api_HostAddress}}/api/medication
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "name": "Dolutegravir",
+  "genericName": "Dolutegravir",
+  "brandName": "Tivicay",
+  "category": "ARV",
+  "medicationType": "INSTI",
+  "strength": "50mg",
+  "form": "Tablet",
+  "description": "Integrase strand transfer inhibitor",
+  "sideEffects": "Headache, insomnia, fatigue",
+  "contraindications": "Hypersensitivity to dolutegravir",
+  "drugInteractions": "Metformin, rifampin, carbamazepine",
+  "storageInstructions": "Store at room temperature",
+  "requiresPrescription": true
+}
+
+### ========== PATIENT MEDICATION ENDPOINTS ==========
+
+### 9. Get My Medications (Patient view)
+GET {{Patient.Api_HostAddress}}/api/patientmedication/my-medications
+Authorization: Bearer {{jwt_token}}
+
+### 10. Get My Current Medications
+GET {{Patient.Api_HostAddress}}/api/patientmedication/my-current-medications
+Authorization: Bearer {{jwt_token}}
+
+### 11. Get My Medication Summary
+GET {{Patient.Api_HostAddress}}/api/patientmedication/my-summary
+Authorization: Bearer {{jwt_token}}
+
+### 12. Get Patient Medications by Patient ID (Doctor/Admin view)
+GET {{Patient.Api_HostAddress}}/api/patientmedication/patient/{{patient_id}}
+Authorization: Bearer {{jwt_token}}
+
+### 13. Get Current Patient Medications
+GET {{Patient.Api_HostAddress}}/api/patientmedication/patient/{{patient_id}}/current
+Authorization: Bearer {{jwt_token}}
+
+### 14. Get Patient Medication Summary (Doctor/Admin)
+GET {{Patient.Api_HostAddress}}/api/patientmedication/patient/{{patient_id}}/summary
+Authorization: Bearer {{jwt_token}}
+
+### 15. Prescribe Medication (Doctor/Admin only)
+POST {{Patient.Api_HostAddress}}/api/patientmedication/prescribe
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "patientId": {{patient_id}},
+  "medicationId": {{medication_id}},
+  "prescribedDate": "2024-12-20T00:00:00Z",
+  "startDate": "2024-12-21T00:00:00Z",
+  "endDate": null,
+  "dosage": "1 tablet",
+  "frequency": "Once daily",
+  "instructions": "Take at bedtime with food to reduce side effects",
+  "notes": "Monitor for CNS side effects during first 2-4 weeks",
+  "refillsRemaining": 5,
+  "nextRefillDue": "2025-01-20T00:00:00Z"
+}
+
+### 16. Prescribe Second Medication
+POST {{Patient.Api_HostAddress}}/api/patientmedication/prescribe
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "patientId": {{patient_id}},
+  "medicationId": 2,
+  "prescribedDate": "2024-12-20T00:00:00Z",
+  "startDate": "2024-12-21T00:00:00Z",
+  "dosage": "1 tablet",
+  "frequency": "Once daily",
+  "instructions": "Take with or without food",
+  "notes": "Can be taken with Atripla",
+  "refillsRemaining": 5,
+  "nextRefillDue": "2025-01-20T00:00:00Z"
+}
+
+### 17. Get Patient Medication by ID
+GET {{Patient.Api_HostAddress}}/api/patientmedication/{{patient_medication_id}}
+Authorization: Bearer {{jwt_token}}
+
+### 18. Update Patient Medication (Doctor/Admin only)
+PUT {{Patient.Api_HostAddress}}/api/patientmedication/{{patient_medication_id}}
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "dosage": "1 tablet",
+  "frequency": "Once daily",
+  "instructions": "Take at bedtime with food. Side effects have decreased.",
+  "status": "Active",
+  "notes": "Patient tolerating well after 2 weeks",
+  "isCurrentlyTaking": true,
+  "refillsRemaining": 4,
+  "lastRefillDate": "2024-12-20T00:00:00Z",
+  "nextRefillDue": "2025-02-20T00:00:00Z"
+}
+
+### 19. Filter Patient Medications - All Active
+GET {{Patient.Api_HostAddress}}/api/patientmedication/filter?status=Active&isCurrentlyTaking=true
+Authorization: Bearer {{jwt_token}}
+
+### 20. Filter Patient Medications - By Category
+GET {{Patient.Api_HostAddress}}/api/patientmedication/filter?category=ARV&medicationType=NNRTI
+Authorization: Bearer {{jwt_token}}
+
+### 21. Filter Patient Medications - By Date Range
+GET {{Patient.Api_HostAddress}}/api/patientmedication/filter?startDateFrom=2024-12-01&startDateTo=2024-12-31
+Authorization: Bearer {{jwt_token}}
+
+### 22. Discontinue Medication (Doctor/Admin only)
+PATCH {{Patient.Api_HostAddress}}/api/patientmedication/{{patient_medication_id}}/discontinue
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+"Patient experienced severe side effects - switching to alternative regimen"
+
+### ========== TESTING SCENARIOS ==========
+
+### 23. Test Duplicate Medication Creation (Should fail)
+POST {{Patient.Api_HostAddress}}/api/medication
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "name": "Efavirenz/Tenofovir/Emtricitabine",
+  "genericName": "Efavirenz/Tenofovir DF/Emtricitabine",
+  "brandName": "Atripla Duplicate",
+  "category": "ARV",
+  "medicationType": "NNRTI + NRTI",
+  "strength": "600mg/300mg/200mg",
+  "form": "Tablet",
+  "requiresPrescription": true
+}
+
+### 24. Test Prescribing Same Medication Twice (Should fail)
+POST {{Patient.Api_HostAddress}}/api/patientmedication/prescribe
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "patientId": {{patient_id}},
+  "medicationId": {{medication_id}},
+  "prescribedDate": "2024-12-20T00:00:00Z",
+  "startDate": "2024-12-21T00:00:00Z",
+  "dosage": "1 tablet",
+  "frequency": "Once daily",
+  "instructions": "This should fail - duplicate active medication"
+}
+
+### 25. Test Non-existent Patient (Should fail)
+POST {{Patient.Api_HostAddress}}/api/patientmedication/prescribe
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "patientId": 999,
+  "medicationId": {{medication_id}},
+  "prescribedDate": "2024-12-20T00:00:00Z",
+  "startDate": "2024-12-21T00:00:00Z",
+  "dosage": "1 tablet",
+  "frequency": "Once daily"
+}
+
+### 26. Test Non-existent Medication (Should fail)
+POST {{Patient.Api_HostAddress}}/api/patientmedication/prescribe
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "patientId": {{patient_id}},
+  "medicationId": 999,
+  "prescribedDate": "2024-12-20T00:00:00Z",
+  "startDate": "2024-12-21T00:00:00Z",
+  "dosage": "1 tablet",
+  "frequency": "Once daily"
+}
