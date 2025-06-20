@@ -18,7 +18,7 @@ namespace Doctor.Infrastructure.DependencyInjection
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<DoctorService>();
-            services.AddScoped<IDoctorRepository, DoctorRepository>();
+            services.AddScoped<IDoctorRepository, DoctorsRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IJwtService, JwtService>();
             return services;

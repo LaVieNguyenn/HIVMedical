@@ -8,7 +8,7 @@ namespace Doctor.Infrastructure.UnitOfWorks
         private readonly DoctorDbContext _context;
         public UnitOfWork(DoctorDbContext context) => _context = context;
 
-        public IDoctorRepository Doctors => new DoctorRepository(_context);
+        public IDoctorRepository Doctors => new DoctorsRepository(_context);
 
         public void Dispose() => _context.Dispose();
 

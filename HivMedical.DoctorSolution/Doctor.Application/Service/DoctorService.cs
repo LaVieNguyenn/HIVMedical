@@ -23,8 +23,10 @@ namespace Doctor.Application.Service
                 FullName = d.User?.FullName,
                 Phone = d.User?.Phone,
                 Email = d.User?.Email,
-                Qualifications = d.Qualifications?.Select(q => q.Qualification?.Name ?? "").ToList(),
-                Specializations = d.Specializations?.Select(s => s.Specialization?.Name ?? "").ToList()
+                Qualifications = d.Qualifications?.Select(q =>
+                    q.Qualification == null ? "" : $"{q.QualificationId}:{q.Qualification.Name}").ToList(),
+                Specializations = d.Specializations?.Select(s =>
+                    s.Specialization == null ? "" : $"{s.SpecializationId}:{s.Specialization.Name}").ToList()
             });
         }
 
@@ -40,47 +42,77 @@ namespace Doctor.Application.Service
                 FullName = d.User?.FullName,
                 Phone = d.User?.Phone,
                 Email = d.User?.Email,
-                Qualifications = d.Qualifications?.Select(q => q.QualificationId.ToString()).ToList(),
-                Specializations = d.Specializations?.Select(s => s.SpecializationId.ToString()).ToList()
+                Qualifications = d.Qualifications?.Select(q =>
+                    q.Qualification == null ? "" : $"{q.QualificationId}:{q.Qualification.Name}").ToList(),
+                Specializations = d.Specializations?.Select(s =>
+                    s.Specialization == null ? "" : $"{s.SpecializationId}:{s.Specialization.Name}").ToList()
             };
         }
 
-        public async Task<DoctorDto> CreateAsync(DoctorDto dto)
+        public async Task<DoctorDto> CreateAsync(DoctorCreateDto dto)
         {
             var entity = new Doctors
             {
                 UserId = dto.UserId,
-                Qualifications = dto.Qualifications?.Select(q => new DoctorQualification { QualificationId = int.Parse(q) }).ToList(),
-                Specializations = dto.Specializations?.Select(s => new DoctorSpecialization { SpecializationId = int.Parse(s) }).ToList()
+                Qualifications = dto.Qualifications?.Select(q =>
+                {
+                    var arr = q.Split(':');
+                    if (arr.Length == 0 || !int.TryParse(arr[0], out int id)) return null;
+                    return new DoctorQualification { QualificationId = id };
+                }).Where(x => x != null).ToList(),
+                Specializations = dto.Specializations?.Select(s =>
+                {
+                    var arr = s.Split(':');
+                    if (arr.Length == 0 || !int.TryParse(arr[0], out int id)) return null;
+                    return new DoctorSpecialization { SpecializationId = id };
+                }).Where(x => x != null).ToList()
             };
 
             await _unitOfWork.Doctors.AddAsync(entity);
             await _unitOfWork.SaveChangesAsync();
 
-            dto.DoctorId = entity.DoctorId;
-            return dto;
+            // Return DoctorDto mới tạo
+            return new DoctorDto
+            {
+                DoctorId = entity.DoctorId,
+                UserId = entity.UserId,
+                Qualifications = entity.Qualifications?.Select(q => q.QualificationId.ToString()).ToList(),
+                Specializations = entity.Specializations?.Select(s => s.SpecializationId.ToString()).ToList(),
+            };
         }
 
-        public async Task UpdateAsync(DoctorDto dto)
+        public async Task<bool> UpdateAsync(int id, DoctorUpdateDto dto)
         {
-            var entity = await _unitOfWork.Doctors.GetByIdAsync(dto.DoctorId);
-            if (entity == null) return;
+            var entity = await _unitOfWork.Doctors.GetByIdAsync(id);
+            if (entity == null) return false;
 
-            entity.Qualifications = dto.Qualifications?.Select(q => new DoctorQualification { QualificationId = int.Parse(q) }).ToList();
-            entity.Specializations = dto.Specializations?.Select(s => new DoctorSpecialization { SpecializationId = int.Parse(s) }).ToList();
+            entity.Qualifications = dto.Qualifications?.Select(q =>
+            {
+                var arr = q.Split(':');
+                if (arr.Length == 0 || !int.TryParse(arr[0], out int qid)) return null;
+                return new DoctorQualification { QualificationId = qid };
+            }).Where(x => x != null).ToList();
 
-            _unitOfWork.Doctors.Update(entity);
+            entity.Specializations = dto.Specializations?.Select(s =>
+            {
+                var arr = s.Split(':');
+                if (arr.Length == 0 || !int.TryParse(arr[0], out int sid)) return null;
+                return new DoctorSpecialization { SpecializationId = sid };
+            }).Where(x => x != null).ToList();
+
+            await _unitOfWork.Doctors.UpdateAsync(entity);
             await _unitOfWork.SaveChangesAsync();
+            return true;
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
             var doctor = await _unitOfWork.Doctors.GetByIdAsync(id);
-            if (doctor != null)
-            {
-                _unitOfWork.Doctors.Remove(doctor);
-                await _unitOfWork.SaveChangesAsync();
-            }
+            if (doctor == null) return false;
+
+            await _unitOfWork.Doctors.DeleteAsync(doctor);
+            await _unitOfWork.SaveChangesAsync();
+            return true;
         }
     }
 }

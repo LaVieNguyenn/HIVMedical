@@ -6,11 +6,10 @@ namespace Doctor.Application.Interfaces
 {
     public interface IDoctorRepository : IGenericRepository<Doctors>
     {
-        Task<IEnumerable<Doctors>> GetAllAsync();
+        Task<List<Doctors>> GetAllAsync();
         Task<Doctors?> GetByIdAsync(int id);
-
-        Task AddAsync(Doctors doctor);
-        void Update(Doctors doctor);
-        void Remove(Doctors doctor);
+        Task<Doctors> AddAsync(Doctors doctor);
+        Task<bool> UpdateAsync(Doctors doctor);
+        Task<bool> DeleteAsync(int id);
     }
 }
