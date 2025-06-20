@@ -1,5 +1,7 @@
 ﻿using Authentication.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Authentication.Infrastructure.Data
 {
@@ -79,16 +81,33 @@ namespace Authentication.Infrastructure.Data
                 new Role
                 {
                     Id = 5,
-                    Name = "Manager",
-                    CreatedAt = DateTime.UtcNow
-                },
-                new Role
-                {
-                    Id = 6,
                     Name = "Admin",
                     CreatedAt = DateTime.UtcNow
                 }
             );
+
+            // Seed admin user
+            modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    Id = 1,
+                    UserName = "admin",
+                    Email = "admin@example.com",
+                    PasswordHash = Hash("admin123"),
+                    FullName = "System Administrator",
+                    Gender = 1,
+                    IsAnonymous = false,
+                    RoleId = 5, // Admin role
+                    CreatedAt = DateTime.UtcNow
+                }
+            );
+        }
+
+        private static string Hash(string password)
+        {
+            using var sha256 = SHA256.Create();
+            var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+            return Convert.ToBase64String(hashedBytes);
         }
     }
 }

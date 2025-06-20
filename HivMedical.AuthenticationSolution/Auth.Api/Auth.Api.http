@@ -1,6 +1,8 @@
 @host = https://localhost:7199
+@adminToken = {{login.response.body.data.accessToken}}
 
-### Login API
+### Login as Admin
+# @name login
 POST {{host}}/api/auth/login
 Content-Type: application/json
 
@@ -21,5 +23,91 @@ Content-Type: application/json
     "dateOfBirth": "1990-01-01",
     "gender": 1
 }
+
+### ========== ADMIN USER MANAGEMENT APIs ==========
+
+### Get All Users (Admin only)
+GET {{host}}/api/admin/users?pageNumber=1&pageSize=10
+Authorization: Bearer {{adminToken}}
+
+### Get Users with Filter
+GET {{host}}/api/admin/users?searchTerm=admin&roleId=5&pageNumber=1&pageSize=10
+Authorization: Bearer {{adminToken}}
+
+### Get User by ID
+GET {{host}}/api/admin/users/1
+Authorization: Bearer {{adminToken}}
+
+### Create New User (Admin only)
+POST {{host}}/api/admin/users
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+    "email": "doctor@example.com",
+    "password": "doctor123",
+    "fullName": "Dr. John Smith",
+    "userName": "drjohn",
+    "phone": "0987654321",
+    "dateOfBirth": "1980-05-15",
+    "gender": 1,
+    "roleId": 4
+}
+
+### Create Staff User
+POST {{host}}/api/admin/users
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+    "email": "staff@example.com",
+    "password": "staff123",
+    "fullName": "Jane Staff",
+    "userName": "janestaff",
+    "phone": "0123456789",
+    "dateOfBirth": "1985-03-20",
+    "gender": 2,
+    "roleId": 3
+}
+
+### Update User
+PUT {{host}}/api/admin/users/2
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+    "fullName": "Dr. John Smith Updated",
+    "phone": "0987654322",
+    "roleId": 4
+}
+
+### Update User Password
+PUT {{host}}/api/admin/users/2
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+    "newPassword": "newpassword123"
+}
+
+### Soft Delete User
+DELETE {{host}}/api/admin/users/2
+Authorization: Bearer {{adminToken}}
+
+### Restore Deleted User
+POST {{host}}/api/admin/users/2/restore
+Authorization: Bearer {{adminToken}}
+
+### Get All Roles
+GET {{host}}/api/admin/roles
+Authorization: Bearer {{adminToken}}
+
+### Get Deleted Users
+GET {{host}}/api/admin/users?isDeleted=true&pageNumber=1&pageSize=10
+Authorization: Bearer {{adminToken}}
+
+### Get Users by Role (Doctors only)
+GET {{host}}/api/admin/users?roleId=4&pageNumber=1&pageSize=10
+Authorization: Bearer {{adminToken}}
 
 ###

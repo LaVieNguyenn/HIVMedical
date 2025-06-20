@@ -19,12 +19,14 @@ namespace Authentication.Infrastructure.DependencyInjection
             
             // Repository registrations
             services.AddScoped<IUserRepository, UserRepository>();
-            
+            services.AddScoped<IRoleRepository, RoleRepository>();
+
             // Unit of Work registration
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             
             // Register services
             services.AddScoped<AuthService>();
+            services.AddScoped<UserManagementService>();
             services.AddScoped<IJwtService, JwtService>();
             
             return services;

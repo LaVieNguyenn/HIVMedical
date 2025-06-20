@@ -1,4 +1,4 @@
-﻿// using SharedKernel.Entities; // Temporarily commented out for Docker build
+﻿
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Authentication.Domain.Entities
 {
-    // Temporary BaseEntity for Docker build
+   
     public class BaseEntity
     {
         public int Id { get; set; }

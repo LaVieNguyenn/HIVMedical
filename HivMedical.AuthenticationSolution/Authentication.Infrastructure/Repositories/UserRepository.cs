@@ -1,4 +1,5 @@
-﻿using Authentication.Application.Interfaces;
+﻿using Authentication.Application.DTOs;
+using Authentication.Application.Interfaces;
 using Authentication.Domain.Entities;
 using Authentication.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -115,6 +116,125 @@ namespace Authentication.Infrastructure.Repositories
         public async Task<IEnumerable<User>> GetManyAsync(Expression<Func<User, bool>> predicate)
         {
             return await _context.Users.Where(predicate).ToListAsync();
+        }
+
+        // Admin user management methods
+        public async Task<PagedUserListResponse> GetUsersWithPaginationAsync(UserFilterRequest filter)
+        {
+            var query = _context.Users.Include(u => u.Role).AsQueryable();
+
+            // Apply filters
+            if (!string.IsNullOrEmpty(filter.SearchTerm))
+            {
+                query = query.Where(u => u.FullName.Contains(filter.SearchTerm) ||
+                                        u.Email.Contains(filter.SearchTerm) ||
+                                        u.UserName.Contains(filter.SearchTerm));
+            }
+
+            if (filter.RoleId.HasValue)
+            {
+                query = query.Where(u => u.RoleId == filter.RoleId.Value);
+            }
+
+            if (filter.IsDeleted.HasValue)
+            {
+                query = query.Where(u => u.IsDeleted == filter.IsDeleted.Value);
+            }
+
+            var totalCount = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling((double)totalCount / filter.PageSize);
+
+            var users = await query
+                .OrderBy(u => u.Id)
+                .Skip((filter.PageNumber - 1) * filter.PageSize)
+                .Take(filter.PageSize)
+                .Select(u => new UserListDto
+                {
+                    Id = u.Id,
+                    UserName = u.UserName,
+                    FullName = u.FullName,
+                    Email = u.Email,
+                    Phone = u.Phone,
+                    IsAnonymous = u.IsAnonymous,
+                    Role = u.Role.Name,
+                    RoleId = u.RoleId,
+                    CreatedAt = u.CreatedAt,
+                    UpdatedAt = u.UpdatedAt,
+                    IsDeleted = u.IsDeleted
+                })
+                .ToListAsync();
+
+            return new PagedUserListResponse
+            {
+                Users = users,
+                TotalCount = totalCount,
+                PageNumber = filter.PageNumber,
+                PageSize = filter.PageSize,
+                TotalPages = totalPages,
+                HasNextPage = filter.PageNumber < totalPages,
+                HasPreviousPage = filter.PageNumber > 1
+            };
+        }
+
+        public async Task<IEnumerable<User>> GetUsersByRoleAsync(int roleId)
+        {
+            return await _context.Users
+                .Include(u => u.Role)
+                .Where(u => u.RoleId == roleId && !u.IsDeleted)
+                .ToListAsync();
+        }
+
+        public async Task<ApiResponse<bool>> SoftDeleteAsync(int id)
+        {
+            try
+            {
+                var user = await GetByIdAsync(id);
+                if (user == null)
+                    return new ApiResponse<bool> { Success = false, Message = "User not found" };
+
+                user.IsDeleted = true;
+                user.UpdatedAt = DateTime.UtcNow;
+
+                _context.Users.Update(user);
+                return new ApiResponse<bool> { Success = true, Data = true, Message = "User deleted successfully" };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse<bool> { Success = false, Message = ex.Message };
+            }
+        }
+
+        public async Task<ApiResponse<bool>> RestoreUserAsync(int id)
+        {
+            try
+            {
+                var user = await GetByIdAsync(id);
+                if (user == null)
+                    return new ApiResponse<bool> { Success = false, Message = "User not found" };
+
+                user.IsDeleted = false;
+                user.UpdatedAt = DateTime.UtcNow;
+
+                _context.Users.Update(user);
+                return new ApiResponse<bool> { Success = true, Data = true, Message = "User restored successfully" };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse<bool> { Success = false, Message = ex.Message };
+            }
+        }
+
+        public async Task<bool> EmailExistsForOtherUserAsync(string email, int userId)
+        {
+            return await _context.Users.AnyAsync(u => u.Email == email && u.Id != userId);
+        }
+
+        public async Task<IEnumerable<User>> GetAllUsersWithRolesAsync()
+        {
+            return await _context.Users
+                .Include(u => u.Role)
+                .Where(u => !u.IsDeleted)
+                .ToListAsync();
         }
     }
 }

@@ -13,11 +13,13 @@ namespace Authentication.Infrastructure.UnitOfWorks
     {
         private readonly AuthDbContext _context;
         public IUserRepository Users { get; }
+        public IRoleRepository Roles { get; }
 
         public UnitOfWork(AuthDbContext context)
         {
             _context = context;
             Users = new UserRepository(_context);
+            Roles = new RoleRepository(_context);
         }
 
         public async Task<int> SaveChangesAsync() => await _context.SaveChangesAsync();

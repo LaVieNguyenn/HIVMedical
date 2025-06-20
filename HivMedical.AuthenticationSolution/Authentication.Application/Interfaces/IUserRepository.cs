@@ -1,4 +1,5 @@
-﻿using Authentication.Domain.Entities;
+﻿using Authentication.Application.DTOs;
+using Authentication.Domain.Entities;
 using SharedLibrary.Interfaces;
 using SharedLibrary.Response;
 
@@ -14,5 +15,13 @@ namespace Authentication.Application.Interfaces
         Task<ApiResponse<User>> UpdateAsync(User entity);
         Task<ApiResponse<bool>> DeleteAsync(int id);
         Task<IEnumerable<User>> GetAllAsync();
+
+        // Admin user management methods
+        Task<PagedUserListResponse> GetUsersWithPaginationAsync(UserFilterRequest filter);
+        Task<IEnumerable<User>> GetUsersByRoleAsync(int roleId);
+        Task<ApiResponse<bool>> SoftDeleteAsync(int id);
+        Task<ApiResponse<bool>> RestoreUserAsync(int id);
+        Task<bool> EmailExistsForOtherUserAsync(string email, int userId);
+        Task<IEnumerable<User>> GetAllUsersWithRolesAsync();
     }
 }
