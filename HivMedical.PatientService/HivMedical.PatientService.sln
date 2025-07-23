@@ -3,13 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Patient.Api", "Patient.Api\Patient.Api.csproj", "{5DD34990-4852-4AF7-BE0B-BA539BB62C89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Patient.Api", "Patient.Api\Patient.Api.csproj", "{5DD34990-4852-4AF7-BE0B-BA539BB62C89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Patient.Domain", "Patient.Domain\Patient.Domain.csproj", "{7CF33E36-9593-4F64-AC2F-B7736156024E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Patient.Domain", "Patient.Domain\Patient.Domain.csproj", "{7CF33E36-9593-4F64-AC2F-B7736156024E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Patient.Infrastructure", "Patient.Infrastructure\Patient.Infrastructure.csproj", "{DF3C08DA-1738-4F62-9309-36E7D49C9DC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Patient.Infrastructure", "Patient.Infrastructure\Patient.Infrastructure.csproj", "{DF3C08DA-1738-4F62-9309-36E7D49C9DC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Patient.Application", "Patient.Application\Patient.Application.csproj", "{BC7CA6BC-6709-4E90-AFEF-C648B215E839}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Patient.Application", "Patient.Application\Patient.Application.csproj", "{BC7CA6BC-6709-4E90-AFEF-C648B215E839}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedKernel", "..\HivMedical.SharedKernel\SharedKernel\SharedKernel.csproj", "{F6FFB0AC-EA21-4B10-85D9-B5C78DE69B97}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedLibrary", "..\HivMedical.SharedLibrary\SharedLibrary\SharedLibrary.csproj", "{2CC94D47-4C65-4948-A218-21473528C629}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{BC7CA6BC-6709-4E90-AFEF-C648B215E839}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC7CA6BC-6709-4E90-AFEF-C648B215E839}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC7CA6BC-6709-4E90-AFEF-C648B215E839}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6FFB0AC-EA21-4B10-85D9-B5C78DE69B97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6FFB0AC-EA21-4B10-85D9-B5C78DE69B97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6FFB0AC-EA21-4B10-85D9-B5C78DE69B97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6FFB0AC-EA21-4B10-85D9-B5C78DE69B97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CC94D47-4C65-4948-A218-21473528C629}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CC94D47-4C65-4948-A218-21473528C629}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CC94D47-4C65-4948-A218-21473528C629}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CC94D47-4C65-4948-A218-21473528C629}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

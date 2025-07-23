@@ -21,7 +21,10 @@ builder.Services.AddScoped<PatientMedicationService>();
 // Add JWT Authentication from SharedLibrary
 builder.Services.AddLibrary(builder.Configuration);
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Add Messaging (RabbitMQ EventBus)
+builder.Services.AddMessaging(builder.Configuration);
+
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
