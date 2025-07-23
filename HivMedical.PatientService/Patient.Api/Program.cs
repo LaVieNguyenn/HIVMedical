@@ -11,18 +11,18 @@ builder.Services.AddControllers();
 // Add Infrastructure
 builder.Services.AddInfrastructure(builder.Configuration);
 
+// Add JWT Authentication from SharedLibrary
+builder.Services.AddLibrary(builder.Configuration);
+
+// Add Messaging (RabbitMQ EventBus)
+builder.Services.AddMessaging(builder.Configuration);
+
 // Add Application Services
 builder.Services.AddScoped<PatientService>();
 builder.Services.AddScoped<MedicalRecordService>();
 builder.Services.AddScoped<AppointmentService>();
 builder.Services.AddScoped<MedicationService>();
 builder.Services.AddScoped<PatientMedicationService>();
-
-// Add JWT Authentication from SharedLibrary
-builder.Services.AddLibrary(builder.Configuration);
-
-// Add Messaging (RabbitMQ EventBus)
-builder.Services.AddMessaging(builder.Configuration);
 
 
 builder.Services.AddEndpointsApiExplorer();

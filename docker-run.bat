@@ -38,14 +38,15 @@ echo ✅ Services are starting up!
 echo.
 echo 🔗 Service URLs:
 echo    RabbitMQ Management: http://localhost:15672 (guest/guest)
-echo.
-echo 📝 Note:
-echo - Only RabbitMQ is running in Docker
-echo - Database services should be running locally
-echo - Auth and Patient services should be run locally using 'dotnet run'
+echo    API Gateway: http://localhost:5000
+echo    Auth Service: http://localhost:5001
+echo    Patient Service: http://localhost:7030
+echo    Auth Database: localhost,1435 (sa/123456)
+echo    Patient Database: localhost,1436 (sa/123456)
 echo.
 echo 🔧 Useful commands:
 echo    View logs: docker-compose logs -f
+echo    View logs for specific service: docker-compose logs -f service-name
 echo    Stop services: docker-compose down
 echo    Restart services: docker-compose restart
 echo.

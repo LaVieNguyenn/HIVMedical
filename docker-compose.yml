@@ -17,8 +17,107 @@ services:
     networks:
       - hivmedical-network
 
+  # Auth Service Database
+  auth-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: hiv-auth-db
+    environment:
+      SA_PASSWORD: "123456"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1435:1433"
+    volumes:
+      - auth_db_data:/var/opt/mssql
+    networks:
+      - hivmedical-network
+    restart: unless-stopped
+
+  # Patient Service Database
+  patient-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: hiv-patient-db
+    environment:
+      SA_PASSWORD: "123456"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1436:1433"
+    volumes:
+      - patient_db_data:/var/opt/mssql
+    networks:
+      - hivmedical-network
+    restart: unless-stopped
+
+  # Auth Service
+  auth-service:
+    build:
+      context: .
+      dockerfile: HivMedical.AuthenticationSolution/Auth.Api/Dockerfile
+    container_name: hiv-auth-service
+    ports:
+      - "5001:80"
+      - "5051:443"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=auth-db;Database=HivMedicalDB;User Id=sa;Password=123456;TrustServerCertificate=true;
+      - RabbitMQ__HostName=rabbitmq
+      - RabbitMQ__UserName=guest
+      - RabbitMQ__Password=guest
+      - RabbitMQ__Port=5672
+    depends_on:
+      - auth-db
+      - rabbitmq
+    networks:
+      - hivmedical-network
+    restart: unless-stopped
+
+  # Patient Service
+  patient-service:
+    build:
+      context: .
+      dockerfile: HivMedical.PatientService/Dockerfile
+    container_name: hiv-patient-service
+    ports:
+      - "7030:80"
+      - "7040:443"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=patient-db;Database=HIVMedical_PatientDB;User Id=sa;Password=123456;TrustServerCertificate=true;
+      - RabbitMQ__HostName=rabbitmq
+      - RabbitMQ__UserName=guest
+      - RabbitMQ__Password=guest
+      - RabbitMQ__Port=5672
+    depends_on:
+      - patient-db
+      - rabbitmq
+      - auth-service
+    networks:
+      - hivmedical-network
+    restart: unless-stopped
+
+  # API Gateway
+  api-gateway:
+    build:
+      context: .
+      dockerfile: HivMedical.Gateway/ApiGateway/Dockerfile
+    container_name: hiv-api-gateway
+    ports:
+      - "5000:80"
+      - "5050:443"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ServiceUrls__AuthService=http://auth-service
+      - ServiceUrls__PatientService=http://patient-service
+    depends_on:
+      - auth-service
+      - patient-service
+    networks:
+      - hivmedical-network
+    restart: unless-stopped
+
 volumes:
   rabbitmq_data:
+  auth_db_data:
+  patient_db_data:
 
 networks:
   hivmedical-network:

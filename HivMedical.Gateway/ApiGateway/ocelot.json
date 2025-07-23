@@ -31,12 +31,12 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5003
+          "Port": 7030
         }
       ],
       "UpstreamPathTemplate": "/api/appointment/{everything}",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
-      "SwaggerKey": "appointment"
+      "SwaggerKey": "patient"
     },
     {
       "DownstreamPathTemplate": "/swagger/{everything}",
@@ -44,11 +44,24 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5003
+          "Port": 7030
         }
       ],
-      "UpstreamPathTemplate": "/swagger/appointment/{everything}",
+      "UpstreamPathTemplate": "/swagger/patient/{everything}",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/patient/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7030
+        }
+      ],
+      "UpstreamPathTemplate": "/api/patient/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "SwaggerKey": "patient"
     }
   ],
   "SwaggerEndPoints": [
@@ -63,12 +76,12 @@
       ]
     },
     {
-      "Key": "appointment",
+      "Key": "patient",
       "Config": [
         {
-          "Name": "Appointment API",
+          "Name": "Patient API",
           "Version": "v1",
-          "Url": "https://localhost:5003/swagger/v1/swagger.json"
+          "Url": "https://localhost:7030/swagger/v1/swagger.json"
         }
       ]
     }

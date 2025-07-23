@@ -23,7 +23,7 @@ namespace ApiGateway.Controllers
             var serviceUrls = new
             {
                 AuthService = _configuration["ServiceUrls:AuthService"],
-                AppointmentService = _configuration["ServiceUrls:AppointmentService"]
+                PatientService = _configuration["ServiceUrls:PatientService"]
             };
 
             return Ok(new
