@@ -49,9 +49,7 @@ services:
 
   # Auth Service
   auth-service:
-    build:
-      context: .
-      dockerfile: HivMedical.AuthenticationSolution/Auth.Api/Dockerfile
+    image: phuocle150304/hivmedical-auth-service:latest
     container_name: hiv-auth-service
     ports:
       - "5001:80"
@@ -72,9 +70,7 @@ services:
 
   # Patient Service
   patient-service:
-    build:
-      context: .
-      dockerfile: HivMedical.PatientService/Dockerfile
+    image: phuocle150304/hivmedical-patient-service:latest
     container_name: hiv-patient-service
     ports:
       - "7030:80"
@@ -96,9 +92,7 @@ services:
 
   # API Gateway
   api-gateway:
-    build:
-      context: .
-      dockerfile: HivMedical.Gateway/ApiGateway/Dockerfile
+    image: phuocle150304/hivmedical-api-gateway:latest
     container_name: hiv-api-gateway
     ports:
       - "5000:80"

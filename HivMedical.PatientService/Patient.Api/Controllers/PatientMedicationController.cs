@@ -226,3 +226,4 @@ namespace Patient.Api.Controllers
         }
     }
 }
+

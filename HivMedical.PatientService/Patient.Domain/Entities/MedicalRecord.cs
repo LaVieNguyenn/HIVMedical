@@ -12,7 +12,7 @@ namespace Patient.Domain.Entities
         public string? LabResults { get; set; }
         public string? Medications { get; set; }
         public string? Notes { get; set; }
-        public int DoctorId { get; set; } // Reference to doctor from Auth service
+        public int DoctorId { get; set; } 
         
         // Navigation properties
         public Patient Patient { get; set; } = null!;

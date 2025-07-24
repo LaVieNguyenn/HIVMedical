@@ -7,9 +7,11 @@ namespace Patient.Infrastructure.Data
     {
         public PatientDbContext(DbContextOptions<PatientDbContext> options) : base(options)
         {
+            Database.Migrate();
         }
 
         public DbSet<Domain.Entities.Patient> Patients { get; set; }
+        public DbSet<Doctor> Doctors { get; set; }
         public DbSet<MedicalRecord> MedicalRecords { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<Medication> Medications { get; set; }
@@ -53,6 +55,19 @@ namespace Patient.Infrastructure.Data
                       .OnDelete(DeleteBehavior.Cascade);
             });
 
+            // Doctor configuration
+            modelBuilder.Entity<Doctor>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.FullName).IsRequired().HasMaxLength(200);
+                entity.Property(e => e.Specialization).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.LicenseNumber).HasMaxLength(50);
+                entity.Property(e => e.PhoneNumber).HasMaxLength(20);
+                entity.Property(e => e.Email).HasMaxLength(100);
+
+                entity.HasIndex(e => e.AuthUserId).IsUnique();
+            });
+
             // Appointment configuration
             modelBuilder.Entity<Appointment>(entity =>
             {
@@ -66,6 +81,11 @@ namespace Patient.Infrastructure.Data
                       .WithMany(p => p.Appointments)
                       .HasForeignKey(e => e.PatientId)
                       .OnDelete(DeleteBehavior.Cascade);
+                
+                entity.HasOne(e => e.Doctor)
+                      .WithMany(d => d.Appointments)
+                      .HasForeignKey(e => e.DoctorId)
+                      .OnDelete(DeleteBehavior.Restrict);
             });
 
             // Medication configuration

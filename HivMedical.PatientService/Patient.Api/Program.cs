@@ -19,6 +19,7 @@ builder.Services.AddMessaging(builder.Configuration);
 
 // Add Application Services
 builder.Services.AddScoped<PatientService>();
+builder.Services.AddScoped<DoctorService>();
 builder.Services.AddScoped<MedicalRecordService>();
 builder.Services.AddScoped<AppointmentService>();
 builder.Services.AddScoped<MedicationService>();

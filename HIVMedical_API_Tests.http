@@ -1,0 +1,469 @@
+### HIVMedical API Test Collection
+### This file contains HTTP requests for testing all HIVMedical API endpoints
+### Use with VS Code REST Client extension or similar HTTP testing tools
+
+### Variables
+@baseUrl = http://localhost:5000
+@authUrl = http://localhost:5001
+@patientUrl = http://localhost:7030
+
+### Store tokens here after authentication
+@patientToken = your_patient_token_here
+@doctorToken = your_doctor_token_here
+@adminToken = your_admin_token_here
+
+### ===========================================
+### SYSTEM HEALTH CHECKS
+### ===========================================
+
+### Health Check - API Gateway
+GET {{baseUrl}}/health
+
+### Health Check - Authentication Service
+GET {{authUrl}}/health
+
+### Health Check - Patient Service
+GET {{patientUrl}}/health
+
+### ===========================================
+### AUTHENTICATION & REGISTRATION
+### ===========================================
+
+### Register Patient
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+    "username": "john_patient",
+    "email": "john.doe@example.com",
+    "password": "SecurePass123!",
+    "firstName": "John",
+    "lastName": "Doe",
+    "role": "Patient"
+}
+
+### Register Doctor
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+    "username": "dr_smith",
+    "email": "dr.smith@hivmedical.com", 
+    "password": "DocPass123!",
+    "firstName": "Sarah",
+    "lastName": "Smith",
+    "role": "Doctor"
+}
+
+### Register Admin
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+    "username": "admin_user",
+    "email": "admin@hivmedical.com",
+    "password": "AdminPass123!",
+    "firstName": "System",
+    "lastName": "Administrator",
+    "role": "Admin"
+}
+
+### Login Patient
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+    "username": "john_patient",
+    "password": "SecurePass123!"
+}
+
+### Login Doctor
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+    "username": "dr_smith",
+    "password": "DocPass123!"
+}
+
+### Login Admin
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+    "username": "admin_user",
+    "password": "AdminPass123!"
+}
+
+### ===========================================
+### USER PROFILE MANAGEMENT
+### ===========================================
+
+### Get Patient Profile
+GET {{baseUrl}}/api/auth/profile
+Authorization: Bearer {{patientToken}}
+
+### Update Patient Profile
+PUT {{baseUrl}}/api/auth/profile
+Authorization: Bearer {{patientToken}}
+Content-Type: application/json
+
+{
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john.doe@example.com",
+    "phoneNumber": "+1234567890",
+    "dateOfBirth": "1985-06-15",
+    "address": "123 Main St, City, State 12345"
+}
+
+### Get Doctor Profile
+GET {{baseUrl}}/api/auth/profile
+Authorization: Bearer {{doctorToken}}
+
+### ===========================================
+### MEDICATION MANAGEMENT
+### ===========================================
+
+### Get All Medications
+GET {{baseUrl}}/api/medication
+Authorization: Bearer {{doctorToken}}
+
+### Get HIV Medications
+GET {{baseUrl}}/api/medication/hiv
+Authorization: Bearer {{doctorToken}}
+
+### Get ARV Medications
+GET {{baseUrl}}/api/medication/arv
+Authorization: Bearer {{doctorToken}}
+
+### Search Medications by Name
+GET {{baseUrl}}/api/medication/search?searchTerm=efavirenz
+Authorization: Bearer {{doctorToken}}
+
+### Get Medication Details
+GET {{baseUrl}}/api/medication/1
+Authorization: Bearer {{doctorToken}}
+
+### Doctor Prescribes Medication
+POST {{baseUrl}}/api/patientmedication/prescribe
+Authorization: Bearer {{doctorToken}}
+Content-Type: application/json
+
+{
+    "patientId": 1,
+    "medicationId": 1,
+    "prescribedDate": "2024-01-15",
+    "startDate": "2024-01-16",
+    "dosage": "600mg",
+    "frequency": "Once daily",
+    "instructions": "Take with food in the evening",
+    "duration": "90 days",
+    "refillsAllowed": 5,
+    "notes": "Initial HIV treatment regimen"
+}
+
+### Patient Views Current Medications
+GET {{baseUrl}}/api/patientmedication/my-current-medications
+Authorization: Bearer {{patientToken}}
+
+### Patient Views All Medication History
+GET {{baseUrl}}/api/patientmedication/my-medications
+Authorization: Bearer {{patientToken}}
+
+### Patient Medication Summary
+GET {{baseUrl}}/api/patientmedication/my-summary
+Authorization: Bearer {{patientToken}}
+
+### Update Patient Medication
+PUT {{baseUrl}}/api/patientmedication/1
+Authorization: Bearer {{doctorToken}}
+Content-Type: application/json
+
+{
+    "dosage": "400mg",
+    "frequency": "Twice daily",
+    "instructions": "Take with food, morning and evening",
+    "adjustmentReason": "Reducing dosage due to side effects"
+}
+
+### Discontinue Medication
+PATCH {{baseUrl}}/api/patientmedication/1/discontinue
+Authorization: Bearer {{doctorToken}}
+Content-Type: application/json
+
+{
+    "discontinueDate": "2024-01-25",
+    "reason": "Severe adverse reaction",
+    "notes": "Patient developed rash and liver enzyme elevation"
+}
+
+### ===========================================
+### APPOINTMENT MANAGEMENT
+### ===========================================
+
+### Patient Books Appointment
+POST {{baseUrl}}/api/appointment
+Authorization: Bearer {{patientToken}}
+Content-Type: application/json
+
+{
+    "doctorId": 2,
+    "appointmentDate": "2024-02-15T10:00:00Z",
+    "appointmentType": "Routine Checkup",
+    "reason": "Monthly HIV monitoring visit",
+    "notes": "Patient experiencing some fatigue"
+}
+
+### Patient Books Emergency Appointment
+POST {{baseUrl}}/api/appointment
+Authorization: Bearer {{patientToken}}
+Content-Type: application/json
+
+{
+    "doctorId": 2,
+    "appointmentDate": "2024-01-20T14:00:00Z",
+    "appointmentType": "Emergency",
+    "reason": "Severe side effects from medication",
+    "priority": "High",
+    "notes": "Patient experiencing nausea and dizziness"
+}
+
+### Patient Views Upcoming Appointments
+GET {{baseUrl}}/api/appointment/upcoming?days=30
+Authorization: Bearer {{patientToken}}
+
+### Patient Views All Appointments
+GET {{baseUrl}}/api/appointment/my-appointments
+Authorization: Bearer {{patientToken}}
+
+### Patient Appointment Summary
+GET {{baseUrl}}/api/appointment/my-summary
+Authorization: Bearer {{patientToken}}
+
+### Doctor Views Today's Appointments
+GET {{baseUrl}}/api/appointment/today
+Authorization: Bearer {{doctorToken}}
+
+### Doctor Views Their Schedule
+GET {{baseUrl}}/api/appointment/doctor/2
+Authorization: Bearer {{doctorToken}}
+
+### Get Appointment Details
+GET {{baseUrl}}/api/appointment/1
+Authorization: Bearer {{doctorToken}}
+
+### Update Appointment
+PUT {{baseUrl}}/api/appointment/1
+Authorization: Bearer {{patientToken}}
+Content-Type: application/json
+
+{
+    "appointmentDate": "2024-02-16T11:00:00Z",
+    "appointmentType": "Follow-up",
+    "reason": "Follow-up on medication side effects",
+    "notes": "Rescheduled due to patient availability"
+}
+
+### Doctor Updates Appointment Status
+PATCH {{baseUrl}}/api/appointment/1/status
+Authorization: Bearer {{doctorToken}}
+Content-Type: application/json
+
+{
+    "status": "Completed",
+    "notes": "Patient vitals stable. CD4 count improved. Continue current medication regimen."
+}
+
+### Cancel Appointment
+DELETE {{baseUrl}}/api/appointment/1
+Authorization: Bearer {{patientToken}}
+
+### ===========================================
+### MEDICAL RECORDS (Future Implementation)
+### ===========================================
+
+### Doctor Creates Medical Record
+POST {{baseUrl}}/api/medicalrecord
+Authorization: Bearer {{doctorToken}}
+Content-Type: application/json
+
+{
+    "patientId": 1,
+    "visitDate": "2024-02-15T10:00:00Z",
+    "diagnosis": "HIV-1 infection, stable on HAART",
+    "symptoms": "Mild fatigue, otherwise asymptomatic",
+    "vitals": {
+        "bloodPressure": "120/80",
+        "temperature": "98.6°F",
+        "heartRate": "72 bpm",
+        "weight": "75 kg"
+    },
+    "labResults": {
+        "cd4Count": 650,
+        "viralLoad": "Undetectable (<20 copies/mL)",
+        "hemoglobin": "14.2 g/dL"
+    },
+    "treatmentNotes": "Patient responding well to current ART regimen"
+}
+
+### Patient Views Medical Records
+GET {{baseUrl}}/api/medicalrecord/my-records
+Authorization: Bearer {{patientToken}}
+
+### Get Medical Record Details
+GET {{baseUrl}}/api/medicalrecord/1
+Authorization: Bearer {{doctorToken}}
+
+### Update Medical Record
+PUT {{baseUrl}}/api/medicalrecord/1
+Authorization: Bearer {{doctorToken}}
+Content-Type: application/json
+
+{
+    "diagnosis": "HIV-1 infection, well-controlled on ART",
+    "symptoms": "No current symptoms",
+    "treatmentNotes": "Excellent response to treatment. Viral load undetectable."
+}
+
+### ===========================================
+### ADMINISTRATIVE FUNCTIONS
+### ===========================================
+
+### Admin - Get All Users
+GET {{baseUrl}}/api/admin/users
+Authorization: Bearer {{adminToken}}
+
+### Admin - Get All Patients
+GET {{baseUrl}}/api/admin/patients
+Authorization: Bearer {{adminToken}}
+
+### Admin - Get All Doctors
+GET {{baseUrl}}/api/admin/doctors
+Authorization: Bearer {{adminToken}}
+
+### Admin - System Statistics
+GET {{baseUrl}}/api/admin/statistics
+Authorization: Bearer {{adminToken}}
+
+### Admin - Get User by ID
+GET {{baseUrl}}/api/admin/users/1
+Authorization: Bearer {{adminToken}}
+
+### Admin - Update User Role
+PATCH {{baseUrl}}/api/admin/users/1/role
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+    "role": "Doctor"
+}
+
+### Admin - Deactivate User
+PATCH {{baseUrl}}/api/admin/users/1/deactivate
+Authorization: Bearer {{adminToken}}
+
+### Admin - Activate User
+PATCH {{baseUrl}}/api/admin/users/1/activate
+Authorization: Bearer {{adminToken}}
+
+### ===========================================
+### ADVANCED QUERIES & REPORTS
+### ===========================================
+
+### Get Appointments by Date Range
+GET {{baseUrl}}/api/appointment/range?startDate=2024-01-01&endDate=2024-01-31
+Authorization: Bearer {{doctorToken}}
+
+### Get Medications by Category
+GET {{baseUrl}}/api/medication/category/antiretroviral
+Authorization: Bearer {{doctorToken}}
+
+### Patient Medication Adherence Report
+GET {{baseUrl}}/api/patientmedication/adherence-report/1
+Authorization: Bearer {{doctorToken}}
+
+### Doctor's Patient List
+GET {{baseUrl}}/api/doctor/patients
+Authorization: Bearer {{doctorToken}}
+
+### Upcoming Appointment Reminders
+GET {{baseUrl}}/api/appointment/reminders?days=7
+Authorization: Bearer {{patientToken}}
+
+### ===========================================
+### ERROR TESTING SCENARIOS
+### ===========================================
+
+### Test Invalid Authentication
+GET {{baseUrl}}/api/auth/profile
+Authorization: Bearer invalid_token
+
+### Test Unauthorized Access
+GET {{baseUrl}}/api/admin/users
+Authorization: Bearer {{patientToken}}
+
+### Test Invalid Data Format
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+    "username": "",
+    "email": "invalid-email",
+    "password": "123"
+}
+
+### Test Non-existent Resource
+GET {{baseUrl}}/api/appointment/99999
+Authorization: Bearer {{patientToken}}
+
+### Test Expired Token Access
+GET {{baseUrl}}/api/auth/profile
+Authorization: Bearer expired_token_here
+
+### ===========================================
+### PERFORMANCE TESTING
+### ===========================================
+
+### Load Test - Multiple Medication Requests
+### (Run this multiple times to test concurrent access)
+GET {{baseUrl}}/api/medication
+Authorization: Bearer {{doctorToken}}
+
+### Load Test - Appointment Creation
+POST {{baseUrl}}/api/appointment
+Authorization: Bearer {{patientToken}}
+Content-Type: application/json
+
+{
+    "doctorId": 2,
+    "appointmentDate": "2024-03-15T10:00:00Z",
+    "appointmentType": "Routine Checkup",
+    "reason": "Performance test appointment"
+}
+
+### ===========================================
+### SWAGGER DOCUMENTATION ENDPOINTS
+### ===========================================
+
+### API Gateway Swagger
+GET {{baseUrl}}/swagger/index.html
+
+### Authentication Service Swagger
+GET {{authUrl}}/swagger/auth/index.html
+
+### Patient Service Swagger
+GET {{patientUrl}}/swagger/patient/index.html
+
+### ===========================================
+### NOTES FOR TESTING
+### ===========================================
+
+# 1. Replace @patientToken, @doctorToken, and @adminToken with actual JWT tokens
+# 2. Ensure all services are running before testing
+# 3. Use proper Content-Type headers for POST/PUT requests
+# 4. Check response status codes and error messages
+# 5. Test both positive and negative scenarios
+# 6. Verify data persistence across requests
+# 7. Test role-based access control
+# 8. Monitor performance and response times
