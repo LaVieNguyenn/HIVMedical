@@ -31,7 +31,10 @@ WORKDIR /app
 COPY --from=build /app/publish .
 
 # Expose port
-EXPOSE 8080
+EXPOSE 5072
+# Set environment to Development and configure URLs
+ENV ASPNETCORE_ENVIRONMENT=Development
+ENV ASPNETCORE_URLS=http://+:5072
 
 # Set entry point
 ENTRYPOINT ["dotnet", "Patient.Api.dll"]

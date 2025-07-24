@@ -45,7 +45,11 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseHttpsRedirection();
+// Only use HTTPS redirection if not in Docker or if HTTPS port is configured
+if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("ASPNETCORE_HTTPS_PORT")))
+{
+    app.UseHttpsRedirection();
+}
 app.UseCors("CorsPolicy");
 
 // Map controllers

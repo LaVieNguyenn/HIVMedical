@@ -1,7 +1,6 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
-EXPOSE 80
-EXPOSE 443
+EXPOSE 5190
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
@@ -17,4 +16,13 @@ RUN dotnet publish "ApiGateway.csproj" -c Release -o /app/publish /p:UseAppHost=
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "ApiGateway.dll"] 
+COPY ["HivMedical.Gateway/ApiGateway/appsettings.Docker.json", "./appsettings.json"]
+COPY ["HivMedical.Gateway/ApiGateway/ocelot.Docker.json", "./ocelot.json"]
+
+# Set environment to Development and configure URLs
+ENV ASPNETCORE_ENVIRONMENT=Development
+ENV ASPNETCORE_URLS=http://+:5190
+# Disable HTTPS redirection in Docker
+ENV ASPNETCORE_HTTPS_PORT=""
+
+ENTRYPOINT ["dotnet", "ApiGateway.dll"]
