@@ -1,5 +1,7 @@
 using Microsoft.OpenApi.Models;
 using Patient.Application.Services;
+using Patient.Application.Services.Interfaces;
+using Patient.Application.BackgroundServices;
 using Patient.Infrastructure.DependencyInjection;
 using SharedLibrary.DependencyInjection;
 
@@ -24,7 +26,21 @@ builder.Services.AddScoped<MedicalRecordService>();
 builder.Services.AddScoped<AppointmentService>();
 builder.Services.AddScoped<MedicationService>();
 builder.Services.AddScoped<PatientMedicationService>();
+// Add Notification Services
+builder.Services.AddSingleton<IEmailService, EmailService>();
+builder.Services.AddSingleton<INotificationTemplateService, NotificationTemplateService>();
+builder.Services.AddSingleton<INotificationLogService, NotificationLogService>();
 
+// Add Event Handlers
+builder.Services.AddScoped<UserRegisteredEventHandler>();
+builder.Services.AddScoped<PatientCreatedEventHandler>();
+builder.Services.AddScoped<PatientUpdatedEventHandler>();
+builder.Services.AddScoped<AppointmentCreatedEventHandler>();
+builder.Services.AddScoped<MedicationPrescribedEventHandler>();
+builder.Services.AddScoped<MedicationRefillDueEventHandler>();
+
+// Add Background Services
+builder.Services.AddHostedService<EmailNotificationBackgroundService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>

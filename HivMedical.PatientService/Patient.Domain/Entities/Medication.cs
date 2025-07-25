@@ -8,8 +8,8 @@ namespace Patient.Domain.Entities
         public string GenericName { get; set; } = string.Empty;
         public string BrandName { get; set; } = string.Empty;
         public string Category { get; set; } = string.Empty; // ARV, Opportunistic Infection, Supplement
-        public string MedicationType { get; set; } = string.Empty; // NRTI, NNRTI, PI, INSTI, etc.
-        public string Strength { get; set; } = string.Empty; // e.g., "600mg", "200mg/25mg"
+        public string MedicationType { get; set; } = string.Empty;
+        public string Strength { get; set; } = string.Empty;
         public string Form { get; set; } = string.Empty; // Tablet, Capsule, Syrup, Injection
         public string? Description { get; set; }
         public string? SideEffects { get; set; }

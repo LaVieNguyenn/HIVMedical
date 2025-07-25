@@ -92,7 +92,6 @@ namespace Authentication.Application.Services
         {
             try
             {
-                // Check if email already exists
                 if (await _uow.Users.EmailExistsAsync(request.Email))
                 {
                     return new ApiResponse<UserDetailsDto>
@@ -102,7 +101,7 @@ namespace Authentication.Application.Services
                     };
                 }
 
-                // Validate role exists
+              
                 var role = await _uow.Roles.GetRoleByIdAsync(request.RoleId);
                 if (role == null)
                 {

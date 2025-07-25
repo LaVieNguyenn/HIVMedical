@@ -22,7 +22,7 @@ namespace Authentication.Application.DTOs
 
         public bool? IsAnonymous { get; set; }
 
-        // Optional password change
+      
         [MinLength(6)]
         public string? NewPassword { get; set; }
     }

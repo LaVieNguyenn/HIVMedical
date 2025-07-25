@@ -2,16 +2,20 @@ using Patient.Application.DTOs;
 using Patient.Domain.Entities;
 using Patient.Infrastructure.UnitOfWorks;
 using SharedLibrary.Response;
+using SharedLibrary.Messaging;
+using Patient.Application.Events;
 
 namespace Patient.Application.Services
 {
     public class PatientMedicationService
     {
         private readonly IUnitOfWork _uow;
+        private readonly IEventBus _eventBus;
 
-        public PatientMedicationService(IUnitOfWork unitOfWork)
+        public PatientMedicationService(IUnitOfWork unitOfWork, IEventBus eventBus)
         {
             _uow = unitOfWork;
+            _eventBus = eventBus;
         }
 
         public async Task<ApiResponse<PatientMedicationDto>> GetPatientMedicationByIdAsync(int id)
@@ -155,6 +159,37 @@ namespace Patient.Application.Services
 
             // Get the created medication with related data
             var createdMedication = await _uow.PatientMedications.GetWithMedicationAsync(patientMedication.Id);
+
+            // Publish MedicationPrescribedEvent
+            try
+            {
+                var medicationPrescribedEvent = new MedicationPrescribedEvent(
+                    patientMedication.Id,
+                    patient.Id,
+                    patient.FullName,
+                    patient.PatientCode,
+                    medication.Id,
+                    medication.Name,
+                    medication.MedicationType,
+                    medication.Category,
+                    patientMedication.PrescribedByDoctorId,
+                    patientMedication.PrescribedDate,
+                    patientMedication.StartDate,
+                    patientMedication.EndDate,
+                    patientMedication.Dosage,
+                    patientMedication.Frequency,
+                    patientMedication.Instructions,
+                    patientMedication.Notes,
+                    patientMedication.CreatedAt
+                );
+
+                _eventBus.Publish(medicationPrescribedEvent);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to publish MedicationPrescribedEvent: {ex.Message}");
+            }
+
             var dto = MapToDto(createdMedication!);
 
             return new ApiResponse<PatientMedicationDto>

@@ -16,7 +16,7 @@ namespace Authentication.Application.Interfaces
         Task<ApiResponse<bool>> DeleteAsync(int id);
         Task<IEnumerable<User>> GetAllAsync();
 
-        // Admin user management methods
+        // Admin methods
         Task<PagedUserListResponse> GetUsersWithPaginationAsync(UserFilterRequest filter);
         Task<IEnumerable<User>> GetUsersByRoleAsync(int roleId);
         Task<ApiResponse<bool>> SoftDeleteAsync(int id);

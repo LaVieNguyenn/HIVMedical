@@ -15,6 +15,7 @@ namespace SharedLibrary.Messaging
         private readonly Dictionary<string, List<Type>> _handlers;
         private readonly IConnection _connection;
         private readonly RabbitMQ.Client.IModel _channel;
+        private readonly JsonSerializerOptions _jsonOptions;
 
         public RabbitMQEventBus(
             IConnectionFactory connectionFactory, 
@@ -25,6 +26,14 @@ namespace SharedLibrary.Messaging
             _scopeFactory = scopeFactory;
             _logger = logger;
             _handlers = new Dictionary<string, List<Type>>();
+            
+            // Configure JSON serialization options for better compatibility
+            _jsonOptions = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                WriteIndented = false
+            };
             
             try
             {
@@ -52,7 +61,8 @@ namespace SharedLibrary.Messaging
                                      exclusive: false, 
                                      autoDelete: false);
 
-                var message = JsonSerializer.Serialize(@event);
+                var message = JsonSerializer.Serialize(@event, _jsonOptions);
+                _logger.LogDebug("Publishing event JSON: {EventJson}", message);
                 var body = Encoding.UTF8.GetBytes(message);
 
                 _channel.BasicPublish(exchange: "",
@@ -128,11 +138,20 @@ namespace SharedLibrary.Messaging
                         continue;
                     }
 
-                    var eventType = _handlers.FirstOrDefault(x => x.Key == eventName).Value
-                                            .FirstOrDefault(h => h == handlerType);
+                    // Get the event type from the handler's generic argument
+                    var eventType = handlerType.GetInterfaces()
+                        .FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEventHandler<>))
+                        ?.GetGenericArguments().FirstOrDefault();
+
+                    if (eventType == null)
+                    {
+                        _logger.LogError("Could not determine event type for handler {HandlerType}", handlerType.Name);
+                        continue;
+                    }
 
                     var concreteType = typeof(IEventHandler<>).MakeGenericType(eventType);
-                    var eventData = JsonSerializer.Deserialize(message, eventType);
+                    _logger.LogDebug("Deserializing event {EventName} JSON: {EventJson}", eventName, message);
+                    var eventData = JsonSerializer.Deserialize(message, eventType, _jsonOptions);
 
                     await (Task)concreteType.GetMethod("Handle").Invoke(handler, new[] { eventData });
                 }

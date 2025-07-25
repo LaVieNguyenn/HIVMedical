@@ -7,7 +7,7 @@ namespace Auth.Api.Controllers
 {
     [ApiController]
     [Route("api/admin")]
-    [Authorize(Roles = "Admin")] // Only Admin role can access these endpoints
+    [Authorize(Roles = "Admin")] 
     public class AdminController : ControllerBase
     {
         private readonly UserManagementService _userManagementService;

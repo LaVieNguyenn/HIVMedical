@@ -11,7 +11,10 @@ namespace Authentication.Infrastructure.Data
         public DbSet<Role> Roles { get; set; }
 
 
-        public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options) { }
+        public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options) 
+        {
+            Database.Migrate();
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
