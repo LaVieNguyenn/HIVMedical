@@ -13,6 +13,11 @@ services:
       - RABBITMQ_DEFAULT_PASS=guest
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
     restart: unless-stopped
     networks:
       - hivmedical-network
@@ -28,6 +33,12 @@ services:
       - "1435:1433"
     volumes:
       - auth_db_data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'NewStrongPassword123@' -C -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
     networks:
       - hivmedical-network
     restart: unless-stopped
@@ -43,15 +54,19 @@ services:
       - "1436:1433"
     volumes:
       - patient_db_data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'NewStrongPassword123@' -C -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
     networks:
       - hivmedical-network
     restart: unless-stopped
 
   # Authentication Service
   hivmedical-authentication-service:
-    build:
-      context: .
-      dockerfile: HivMedical.AuthenticationSolution/Dockerfile
+    image: phuocle150304/hivmedical-hivmedical-authentication-service:latest
     container_name: hivmedical-authentication-service
     ports:
       - "5051:5051"
@@ -65,18 +80,18 @@ services:
       - RabbitMQ__Password=guest
       - RabbitMQ__Port=5672
     depends_on:
-      - auth-db
-      - rabbitmq
+      auth-db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     networks:
       - hivmedical-network
     restart: unless-stopped
 
   # Patient Service
   patient-service:
-    build:
-      context: .
-      dockerfile: HivMedical.PatientService/Dockerfile
-    container_name: patient-service
+    image: phuocle150304/hivmedical-patient-service:latest
+    container_name: hivmedical-patient-service
     ports:
       - "5072:5072"
     environment:
@@ -88,24 +103,25 @@ services:
       - RabbitMQ__Password=guest
       - RabbitMQ__Port=5672
     depends_on:
-      - patient-db
-      - rabbitmq
+      patient-db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     networks:
       - hivmedical-network
     restart: unless-stopped
 
   # API Gateway
   hivmedical-api-gateway:
-    build:
-      context: .
-      dockerfile: HivMedical.Gateway/ApiGateway/Dockerfile
+    image: phuocle150304/hivmedical-hivmedical-api-gateway:latest
     container_name: hivmedical-api-gateway
     ports:
       - "5190:5190"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:5190
-      - ASPNETCORE_HTTPS_PORT=""
+      - ServiceUrls__AuthService=http://hivmedical-authentication-service:5051
+      - ServiceUrls__PatientService=http://hivmedical-patient-service:5072
     depends_on:
       - hivmedical-authentication-service
       - patient-service

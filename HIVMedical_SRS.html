@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HIVMedical System - Software Requirements Specification</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', serif;
+            line-height: 1.6;
+            margin: 2cm;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            page-break-before: always;
+        }
+        h2 {
+            color: #34495e;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+        h3 {
+            color: #2c3e50;
+            margin-top: 25px;
+        }
+        h4 {
+            color: #34495e;
+            margin-top: 20px;
+        }
+        .document-header {
+            text-align: center;
+            border: 2px solid #3498db;
+            padding: 20px;
+            margin-bottom: 30px;
+            background-color: #f8f9fa;
+        }
+        .document-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .requirement {
+            background-color: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .requirement-id {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        ul, ol {
+            margin-left: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        .toc {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .toc h2 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        .toc ul {
+            list-style-type: none;
+        }
+        .toc li {
+            margin: 5px 0;
+        }
+        .toc a {
+            text-decoration: none;
+            color: #3498db;
+        }
+        .toc a:hover {
+            text-decoration: underline;
+        }
+        @media print {
+            body { margin: 1cm; }
+            h1 { page-break-before: always; }
+            .requirement { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+    <div class="document-header">
+        <h1>Software Requirements Specification (SRS)</h1>
+        <h2>HIVMedical System</h2>
+        <div class="document-info">
+            <div><strong>Document Version:</strong> 1.0</div>
+            <div><strong>Date:</strong> July 28, 2025</div>
+        </div>
+        <div><strong>Project:</strong> HIVMedical - HIV Patient Care Management System</div>
+    </div>
+
+    <div class="toc">
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><a href="#introduction">1. Introduction</a>
+                <ul>
+                    <li><a href="#purpose">1.1 Purpose</a></li>
+                    <li><a href="#conventions">1.2 Document Conventions</a></li>
+                    <li><a href="#audience">1.3 Intended Audience</a></li>
+                    <li><a href="#scope">1.4 Product Scope</a></li>
+                    <li><a href="#references">1.5 References</a></li>
+                </ul>
+            </li>
+            <li><a href="#description">2. Overall Description</a></li>
+            <li><a href="#features">3. System Features</a></li>
+            <li><a href="#interfaces">4. External Interface Requirements</a></li>
+            <li><a href="#nonfunctional">5. Non-Functional Requirements</a></li>
+            <li><a href="#other">6. Other Requirements</a></li>
+            <li><a href="#appendices">7. Appendices</a></li>
+        </ul>
+    </div>
+
+    <h1 id="introduction">1. Introduction</h1>
+
+    <h3 id="purpose">1.1 Purpose</h3>
+    <p>This document specifies the software requirements for the HIVMedical System, a comprehensive healthcare management platform designed specifically for HIV patient care. The system aims to improve medication adherence, streamline appointment scheduling, and enhance patient-doctor communication.</p>
+
+    <h3 id="conventions">1.2 Document Conventions</h3>
+    <ul>
+        <li><strong>Functional Requirements:</strong> Prefixed with FR-</li>
+        <li><strong>Non-Functional Requirements:</strong> Prefixed with NFR-</li>
+        <li><strong>Business Rules:</strong> Prefixed with BR-</li>
+        <li><strong>User Stories:</strong> Prefixed with US-</li>
+    </ul>
+
+    <h3 id="audience">1.3 Intended Audience</h3>
+    <ul>
+        <li>Development Team</li>
+        <li>Project Managers</li>
+        <li>Healthcare Professionals</li>
+        <li>System Administrators</li>
+        <li>Quality Assurance Team</li>
+    </ul>
+
+    <h3 id="scope">1.4 Product Scope</h3>
+    <p>The HIVMedical System is a web-based application that provides:</p>
+    <ul>
+        <li>Patient registration and profile management</li>
+        <li>Medication adherence tracking</li>
+        <li>Appointment scheduling</li>
+        <li>Medical record management</li>
+        <li>Automated notification system</li>
+        <li>Role-based access control</li>
+    </ul>
+
+    <h3 id="references">1.5 References</h3>
+    <ul>
+        <li>WHO Guidelines on HIV Treatment</li>
+        <li>Healthcare Data Security Standards</li>
+        <li>.NET Core Documentation</li>
+        <li>Clean Architecture Principles</li>
+    </ul>
+
+    <h1 id="description">2. Overall Description</h1>
+
+    <h3>2.1 Product Perspective</h3>
+    <p>The HIVMedical System is a new, self-contained system that integrates multiple healthcare management functionalities into a unified platform. It consists of:</p>
+    <ul>
+        <li><strong>Authentication Service:</strong> User management and authorization</li>
+        <li><strong>Patient Service:</strong> Core patient management functionality</li>
+        <li><strong>API Gateway:</strong> Centralized API management</li>
+        <li><strong>Notification Service:</strong> Automated reminders and alerts</li>
+    </ul>
+
+    <h3>2.2 User Classes and Characteristics</h3>
+
+    <h4>2.2.1 Patients</h4>
+    <ul>
+        <li><strong>Primary users</strong> of the system</li>
+        <li>Manage their medication schedules</li>
+        <li>Book appointments with doctors</li>
+        <li>View medical records</li>
+        <li><strong>Technical expertise:</strong> Basic to intermediate</li>
+    </ul>
+
+    <h4>2.2.2 Doctors</h4>
+    <ul>
+        <li><strong>Healthcare providers</strong> using the system</li>
+        <li>Manage patient appointments</li>
+        <li>Create and update medical records</li>
+        <li>Prescribe medications</li>
+        <li><strong>Technical expertise:</strong> Intermediate</li>
+    </ul>
+
+    <h4>2.2.3 Administrators</h4>
+    <ul>
+        <li><strong>System managers</strong> with full access</li>
+        <li>Manage user accounts</li>
+        <li>System configuration</li>
+        <li>Generate reports</li>
+        <li><strong>Technical expertise:</strong> Advanced</li>
+    </ul>
+
+    <h3>2.3 Operating Environment</h3>
+    <ul>
+        <li><strong>Client-side:</strong> Modern web browsers (Chrome, Firefox, Safari, Edge)</li>
+        <li><strong>Server-side:</strong> Windows/Linux servers</li>
+        <li><strong>Database:</strong> SQL Server</li>
+        <li><strong>Framework:</strong> .NET Core 6+</li>
+        <li><strong>Message Queue:</strong> RabbitMQ</li>
+    </ul>
+
+    <h1 id="features">3. System Features</h1>
+
+    <h2>3.1 User Authentication and Authorization</h2>
+
+    <div class="requirement">
+        <div class="requirement-id">FR-001: Secure User Registration</div>
+        <p>The system shall provide secure user registration functionality</p>
+        <ul>
+            <li>Users can register with email and password</li>
+            <li>Email verification required for account activation</li>
+            <li>Password strength requirements enforced</li>
+        </ul>
+    </div>
+
+    <div class="requirement">
+        <div class="requirement-id">FR-002: Multi-role Authentication</div>
+        <p>The system shall support multi-role authentication</p>
+        <ul>
+            <li>Three user roles: Patient, Doctor, Administrator</li>
+            <li>Role-based access control implementation</li>
+            <li>JWT token-based authentication</li>
+        </ul>
+    </div>
+
+    <div class="requirement">
+        <div class="requirement-id">FR-003: Password Reset</div>
+        <p>The system shall provide password reset functionality</p>
+        <ul>
+            <li>Forgot password feature via email</li>
+            <li>Secure password reset tokens with expiration</li>
+            <li>Password history tracking</li>
+        </ul>
+    </div>
+
+    <h2>3.2 Patient Management</h2>
+
+    <div class="requirement">
+        <div class="requirement-id">FR-004: Patient Profile Management</div>
+        <p>The system shall allow patient profile creation and management</p>
+        <ul>
+            <li>Complete demographic information</li>
+            <li>HIV-specific medical data</li>
+            <li>Emergency contact information</li>
+            <li>Unique patient code generation</li>
+        </ul>
+    </div>
+
+    <div class="requirement">
+        <div class="requirement-id">FR-005: Patient Search</div>
+        <p>The system shall support patient search functionality</p>
+        <ul>
+            <li>Search by patient code, name, or email</li>
+            <li>Advanced filtering options</li>
+            <li>Pagination for large result sets</li>
+        </ul>
+    </div>
+
+    <h2>3.3 Medication Management</h2>
+
+    <div class="requirement">
+        <div class="requirement-id">FR-007: Medication Database</div>
+        <p>The system shall provide comprehensive medication database</p>
+        <ul>
+            <li>Generic and brand name medications</li>
+            <li>Drug categories and classifications</li>
+            <li>Side effects and contraindications</li>
+            <li>Drug interaction warnings</li>
+        </ul>
+    </div>
+
+    <div class="requirement">
+        <div class="requirement-id">FR-009: Adherence Tracking</div>
+        <p>The system shall provide medication adherence tracking</p>
+        <ul>
+            <li>Scheduled medication times</li>
+            <li>Actual intake recording</li>
+            <li>Adherence percentage calculation</li>
+            <li>Missed dose tracking</li>
+        </ul>
+    </div>
+
+    <h1 id="nonfunctional">5. Non-Functional Requirements</h1>
+
+    <h2>5.1 Performance Requirements</h2>
+
+    <div class="requirement">
+        <div class="requirement-id">NFR-001: Response Time</div>
+        <ul>
+            <li>Page load time shall not exceed 3 seconds</li>
+            <li>API response time shall not exceed 2 seconds</li>
+            <li>Database query optimization required</li>
+        </ul>
+    </div>
+
+    <div class="requirement">
+        <div class="requirement-id">NFR-002: Throughput</div>
+        <ul>
+            <li>System shall support 1000 concurrent users</li>
+            <li>Database shall handle 10,000 transactions per hour</li>
+            <li>Message queue processing capacity of 1000 messages/minute</li>
+        </ul>
+    </div>
+
+    <h2>5.2 Security Requirements</h2>
+
+    <div class="requirement">
+        <div class="requirement-id">NFR-007: Data Encryption</div>
+        <ul>
+            <li>TLS 1.3 for data in transit</li>
+            <li>AES-256 encryption for data at rest</li>
+            <li>Database encryption at column level</li>
+        </ul>
+    </div>
+
+    <div class="requirement">
+        <div class="requirement-id">NFR-009: Privacy Protection</div>
+        <ul>
+            <li>HIPAA compliance for patient data</li>
+            <li>Data anonymization capabilities</li>
+            <li>Right to data deletion</li>
+        </ul>
+    </div>
+
+    <h1 id="other">6. Other Requirements</h1>
+
+    <h2>6.1 Business Rules</h2>
+
+    <div class="requirement">
+        <div class="requirement-id">BR-001: Patient Registration</div>
+        <ul>
+            <li>Unique email address per account</li>
+            <li>Minimum age requirement: 18 years</li>
+            <li>Valid emergency contact required</li>
+        </ul>
+    </div>
+
+    <div class="requirement">
+        <div class="requirement-id">BR-002: Medication Prescription</div>
+        <ul>
+            <li>Only licensed doctors can prescribe medications</li>
+            <li>Prescription expiry dates must be enforced</li>
+            <li>Drug interaction warnings must be displayed</li>
+        </ul>
+    </div>
+
+    <h1 id="appendices">7. Appendices</h1>
+
+    <h2>Appendix A: Glossary</h2>
+    <table>
+        <tr>
+            <th>Term</th>
+            <th>Definition</th>
+        </tr>
+        <tr>
+            <td>Adherence</td>
+            <td>The degree to which a patient follows prescribed medication schedules</td>
+        </tr>
+        <tr>
+            <td>ARV</td>
+            <td>Antiretroviral medication used in HIV treatment</td>
+        </tr>
+        <tr>
+            <td>HIPAA</td>
+            <td>Health Insurance Portability and Accountability Act</td>
+        </tr>
+        <tr>
+            <td>JWT</td>
+            <td>JSON Web Token for authentication</td>
+        </tr>
+    </table>
+
+    <h2>Appendix B: Use Case Scenarios</h2>
+
+    <h3>Use Case 1: Patient Medication Adherence Tracking</h3>
+    <p><strong>Actor:</strong> Patient<br>
+    <strong>Precondition:</strong> Patient is logged in and has prescribed medications</p>
+    
+    <p><strong>Main Flow:</strong></p>
+    <ol>
+        <li>Patient views today's medication schedule</li>
+        <li>Patient marks medication as taken</li>
+        <li>System records adherence data</li>
+        <li>System updates adherence statistics</li>
+        <li>System sends confirmation notification</li>
+    </ol>
+
+    <p><strong>Alternative Flow:</strong></p>
+    <ul>
+        <li>If medication is missed, system prompts for reason</li>
+        <li>System sends reminder for missed medication</li>
+    </ul>
+
+    <h2>Document Control</h2>
+    <table>
+        <tr>
+            <td><strong>Created by:</strong></td>
+            <td>Development Team</td>
+        </tr>
+        <tr>
+            <td><strong>Reviewed by:</strong></td>
+            <td>Project Manager, Healthcare Consultant</td>
+        </tr>
+        <tr>
+            <td><strong>Approved by:</strong></td>
+            <td>Stakeholders</td>
+        </tr>
+        <tr>
+            <td><strong>Last Updated:</strong></td>
+            <td>July 28, 2025</td>
+        </tr>
+        <tr>
+            <td><strong>Next Review Date:</strong></td>
+            <td>August 28, 2025</td>
+        </tr>
+    </table>
+
+</body>
+</html>
